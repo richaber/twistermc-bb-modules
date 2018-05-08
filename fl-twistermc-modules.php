@@ -6,6 +6,12 @@
  * Version: 0.6.6
  * Author: TwisterMc
  * Author URI: http://www.twistermc.com
+ * License:      GPL2
+ * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:  tmcbb
+ * Domain Path:  /languages
+ *
+ * @package TwisterMcBBModules
  */
 
 // Exit if accessed directly.
@@ -26,6 +32,22 @@ define( 'TMC_BB_DIR', dirname( __FILE__ ) . '/' );
  * @var string HCMCSEARCH_PLUGIN_URL
  */
 define( 'TMC_BB_URL', plugins_url( '/', __FILE__ ) );
+
+/**
+ * The relative path to this plugin directory, from WP_PLUGIN_DIR, with trailing slash.
+ *
+ * @var string TMC_BB_REL_DIR
+ */
+define( 'TMC_BB_REL_DIR', basename( TMC_BB_DIR ) . '/' );
+
+/**
+ * Setup the plugin text domain for gettext i18n/l10n.
+ */
+function tmcbb_load_textdomain() {
+	load_plugin_textdomain( 'tmcbb', false, TMC_BB_REL_DIR . 'languages/' );
+}
+
+add_action( 'init', 'tmcbb_load_textdomain', 0 );
 
 /**
  * Load our plugin's custom modules.
