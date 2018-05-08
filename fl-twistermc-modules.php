@@ -29,6 +29,8 @@ define( 'TMC_BB_URL', plugins_url( '/', __FILE__ ) );
 
 /**
  * Load our plugin's custom modules.
+ *
+ * @action init
  */
 function tmcbb_load_modules() {
 
@@ -43,7 +45,9 @@ function tmcbb_load_modules() {
 add_action( 'init', 'tmcbb_load_modules' );
 
 /**
- * Adds video attributes query strings to embedded YouTube videos
+ * Adds video attributes query strings to embedded YouTube videos.
+ *
+ * @filter oembed_result
  */
 function tmcbb_oembed_result( $html, $url, $args ) {
 	return str_replace( '?feature=oembed', '?feature=oembed&loop=1&controls=0&showinfo=0&rel=0&enablejsapi=1', $html );
@@ -52,7 +56,9 @@ function tmcbb_oembed_result( $html, $url, $args ) {
 add_filter( 'oembed_result', 'tmcbb_oembed_result', 10, 3 );
 
 /**
- * Adds video attributes query strings to embedded Vimeo videos
+ * Adds video attributes query strings to embedded Vimeo videos.
+ *
+ * @filter oembed_fetch_url
  */
 function tmcbb_add_video_args( $provider, $url, $args ) {
 	if ( strpos( $provider, '//vimeo.com/' ) !== false ) {
