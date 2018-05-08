@@ -19,8 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
-<?php $module->example_method(); ?>
-
 .tmc_isVisibilyHidden {
 	width: 1px;
 	height: 1px;
