@@ -13,19 +13,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TMC_BB_DIR', plugin_dir_path( __FILE__ ) );
+/**
+ * The full directory path to the main plugin file, with trailing slash.
+ *
+ * @var string TMC_BB_DIR
+ */
+define( 'TMC_BB_DIR', dirname( __FILE__ ) . '/' );
 
+/**
+ * The full URL to the main plugin file, with trailing slash.
+ *
+ * @var string HCMCSEARCH_PLUGIN_URL
+ */
 define( 'TMC_BB_URL', plugins_url( '/', __FILE__ ) );
 
 /**
- * Custom modules
+ * Load our plugin's custom modules.
  */
 function fl_load_module_bbtwistermc() {
-	if ( class_exists( 'FLBuilder' ) ) {
-		require_once 'slick/slick.php';
-		require_once 'fullImage/fullImage.php';
+
+	if ( ! class_exists( 'FLBuilder' ) ) {
+		return;
 	}
+
+	require_once TMC_BB_DIR . 'slick/class-bbslickslider.php';
+	require_once TMC_BB_DIR . 'fullImage/fullImage.php';
 }
+
 add_action( 'init', 'fl_load_module_bbtwistermc' );
 
 /**
