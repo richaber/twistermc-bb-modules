@@ -1,6 +1,8 @@
 <?php
 /**
  * BBSlickSlider Class file.
+ *
+ * @package TwisterMcBBModules
  */
 
 // Exit if accessed directly.
@@ -20,9 +22,9 @@ class BBSlickSlider extends FLBuilderModule {
 
 		parent::__construct(
 			array(
-				'name'          => __( 'Slick', 'fl-builder' ),
-				'description'   => __( 'Slick Slider for BeaverBuilder', 'fl-builder' ),
-				'category'      => __( 'Advanced Modules', 'fl-builder' ),
+				'name'          => __( 'Slick', 'tmcbb' ),
+				'description'   => __( 'Slick Slider for BeaverBuilder', 'tmcbb' ),
+				'category'      => __( 'Advanced Modules', 'tmcbb' ),
 				'dir'           => TMC_BB_DIR . 'slick/',
 				'url'           => TMC_BB_URL . 'slick/',
 			)
@@ -37,10 +39,11 @@ class BBSlickSlider extends FLBuilderModule {
 		$this->add_js( 'slick-slider-js-cdn', TMC_BB_URL . '/slick/js/slick.js', array( 'jquery' ), '', false );
 	}
 
-	/* ---------------------------------------------------------------------
-	Enqueue Vimeo Helper Script
-	TODO: This should only be included if we have Vimeo modules
-	------------------------------------------------------------------------ */
+	/**
+	 * Enqueue Vimeo Helper Script
+	 *
+	 * @todo This should only be included if we have Vimeo modules.
+	 */
 	public function enqueue_scripts() {
 		if ( $this->settings && 'video' === $this->settings->photoVideo ) {
 			wp_enqueue_script( 'vimeo-helper', '//f.vimeocdn.com/js/froogaloop2.min.js', array(), '3', true );
@@ -56,19 +59,19 @@ class BBSlickSlider extends FLBuilderModule {
 FLBuilder::register_module(
 	'BBSlickSlider',
 	array(
-		'general'       => array( // Tab
-			'title'    => __( 'Media', 'fl-builder' ), // Tab title
-			'sections' => array( // Tab Sections
-				'general' => array( // Section
-					'title'  => __( 'Media Settings', 'fl-builder' ), // Section Title
-					'fields' => array( // Section Fields
+		'general'       => array(
+			'title'    => __( 'Media', 'tmcbb' ),
+			'sections' => array(
+				'general' => array(
+					'title'  => __( 'Media Settings', 'tmcbb' ),
+					'fields' => array(
 						'photoVideo' => array(
 							'type'    => 'select',
-							'label'   => __( 'Type of Media', 'fl-builder' ),
+							'label'   => __( 'Type of Media', 'tmcbb' ),
 							'default' => 'photo',
 							'options' => array(
-								'photo' => __( 'Photo', 'fl-builder' ),
-								'video' => __( 'Video - YouTube/Vimeo *Beta*', 'fl-builder' ),
+								'photo' => __( 'Photo', 'tmcbb' ),
+								'video' => __( 'Video - YouTube/Vimeo *Beta*', 'tmcbb' ),
 							),
 							'toggle'  => array(
 								'photo' => array(
@@ -84,31 +87,31 @@ FLBuilder::register_module(
 				),
 			),
 		),
-		'imageSettings' => array( // Tab
-			'title'    => __( 'Images', 'fl-builder' ), // Tab title
-			'sections' => array( // Tab Sections
-				'general' => array( // Section
-					'title'  => __( 'Image Settings', 'fl-builder' ), // Section Title
-					'fields' => array( // Section Fields
+		'imageSettings' => array(
+			'title'    => __( 'Images', 'tmcbb' ),
+			'sections' => array(
+				'general' => array(
+					'title'  => __( 'Image Settings', 'tmcbb' ),
+					'fields' => array(
 						'multiple_photos_field' => array(
 							'type'  => 'multiple-photos',
-							'label' => __( 'Photos', 'fl-builder' ),
+							'label' => __( 'Photos', 'tmcbb' ),
 						),
 						'showCaptions'          => array(
 							'type'    => 'select',
-							'label'   => __( 'Show Captions', 'fl-builder' ),
+							'label'   => __( 'Show Captions', 'tmcbb' ),
 							'default' => 'false',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 						),
 						'oneSlide'              => array(
 							'type'    => 'select',
-							'label'   => __( 'Show # Slides', 'fl-builder' ),
+							'label'   => __( 'Show # Slides', 'tmcbb' ),
 							'options' => array(
-								'true'  => __( 'One', 'fl-builder' ),
-								'false' => __( 'Multiple', 'fl-builder' ),
+								'true'  => __( 'One', 'tmcbb' ),
+								'false' => __( 'Multiple', 'tmcbb' ),
 							),
 							'toggle'  => array(
 								'false' => array(
@@ -121,54 +124,54 @@ FLBuilder::register_module(
 						),
 						'forceImageSize'        => array(
 							'type'    => 'select',
-							'label'   => __( 'Force Images to Full Width', 'fl-builder' ),
+							'label'   => __( 'Force Images to Full Width', 'tmcbb' ),
 							'default' => 'false',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 						),
 					),
 				),
 			),
 		),
-		'videoSettings' => array( // Tab
-			'title'    => __( 'Videos', 'fl-builder' ), // Tab title
-			'sections' => array( // Tab Sections
-				'general' => array( // Section
-					'title'  => __( 'Video Controls', 'fl-builder' ), // Section Title
-					'fields' => array( // Section Fields
+		'videoSettings' => array(
+			'title'    => __( 'Videos', 'tmcbb' ),
+			'sections' => array(
+				'general' => array(
+					'title'  => __( 'Video Controls', 'tmcbb' ),
+					'fields' => array(
 						'multiple_video_field' => array(
 							'type'     => 'text',
-							'label'    => __( 'Video URL', 'fl-builder' ),
+							'label'    => __( 'Video URL', 'tmcbb' ),
 							'multiple' => true,
 						),
 						'autoplay_videos'      => array(
 							'type'    => 'select',
-							'label'   => __( 'Auto play videos?', 'fl-builder' ),
+							'label'   => __( 'Auto play videos?', 'tmcbb' ),
 							'default' => 'false',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 						),
 					),
 				),
 			),
 		),
-		'toggle'        => array( // Tab
-			'title'    => __( 'Controls', 'fl-builder' ), // Tab title
-			'sections' => array( // Tab Sections
-				'general' => array( // Section
-					'title'  => __( 'Slideshow Controls', 'fl-builder' ), // Section Title
-					'fields' => array( // Section Fields
+		'toggle'        => array(
+			'title'    => __( 'Controls', 'tmcbb' ),
+			'sections' => array(
+				'general' => array(
+					'title'  => __( 'Slideshow Controls', 'tmcbb' ),
+					'fields' => array(
 						'autoPlay'         => array(
 							'type'    => 'select',
-							'label'   => __( 'Auto Play', 'fl-builder' ),
+							'label'   => __( 'Auto Play', 'tmcbb' ),
 							'default' => 'false',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 							'toggle'  => array(
 								'true' => array(
@@ -178,35 +181,35 @@ FLBuilder::register_module(
 						),
 						'autoPlaySpeed'    => array(
 							'type'        => 'text',
-							'label'       => __( 'Auto Play Speed', 'fl-builder' ),
+							'label'       => __( 'Auto Play Speed', 'tmcbb' ),
 							'default'     => '3000',
 							'description' => 'milliseconds',
 						),
 						'arrows'           => array(
 							'type'    => 'select',
-							'label'   => __( 'Show Arrows', 'fl-builder' ),
+							'label'   => __( 'Show Arrows', 'tmcbb' ),
 							'default' => 'true',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 						),
 						'pauseOnHover'     => array(
 							'type'    => 'select',
-							'label'   => __( 'Pause on Hover', 'fl-builder' ),
+							'label'   => __( 'Pause on Hover', 'tmcbb' ),
 							'default' => 'true',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 						),
 						'dots'             => array(
 							'type'    => 'select',
-							'label'   => __( 'Show Dots', 'fl-builder' ),
+							'label'   => __( 'Show Dots', 'tmcbb' ),
 							'default' => 'true',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 							'toggle'  => array(
 								'true' => array(
@@ -216,86 +219,86 @@ FLBuilder::register_module(
 						),
 						'pauseOnDotsHover' => array(
 							'type'    => 'select',
-							'label'   => __( 'Pause on Dots Hover', 'fl-builder' ),
+							'label'   => __( 'Pause on Dots Hover', 'tmcbb' ),
 							'default' => 'true',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 						),
 					),
 				),
 			),
 		),
-		'design'        => array( // Tab
-			'title'    => __( 'Design', 'fl-builder' ), // Tab title
-			'sections' => array( // Tab Sections
-				'general' => array( // Section
-					'title'  => __( 'Tweak the Design', 'fl-builder' ), // Section Title
-					'fields' => array( // Section Fields
+		'design'        => array(
+			'title'    => __( 'Design', 'tmcbb' ),
+			'sections' => array(
+				'general' => array(
+					'title'  => __( 'Tweak the Design', 'tmcbb' ),
+					'fields' => array(
 						'arrowSize'                 => array(
 							'type'        => 'text',
-							'label'       => __( 'Arrow Size', 'fl-builder' ),
+							'label'       => __( 'Arrow Size', 'tmcbb' ),
 							'default'     => '20',
 							'description' => 'pixels',
 						),
 						'arrowColor'                => array(
 							'type'    => 'color',
-							'label'   => __( 'Arrow Color', 'fl-builder' ),
+							'label'   => __( 'Arrow Color', 'tmcbb' ),
 							'default' => 'ffffff',
 						),
 						'arrowBackgroundColor'      => array(
 							'type'       => 'color',
-							'label'      => __( 'Arrow Background Color', 'fl-builder' ),
+							'label'      => __( 'Arrow Background Color', 'tmcbb' ),
 							'default'    => '333333',
 							'show_reset' => true,
 						),
 						'arrowHoverColor'           => array(
 							'type'    => 'color',
-							'label'   => __( 'Arrow Hover Color', 'fl-builder' ),
+							'label'   => __( 'Arrow Hover Color', 'tmcbb' ),
 							'default' => 'ffffff',
 						),
 						'arrowHoverBackgroundColor' => array(
 							'type'       => 'color',
-							'label'      => __( 'Arrow Hover Background Color', 'fl-builder' ),
+							'label'      => __( 'Arrow Hover Background Color', 'tmcbb' ),
 							'default'    => '689BCA',
 							'show_reset' => true,
 						),
 						'dotSize'                   => array(
 							'type'        => 'text',
-							'label'       => __( 'Dot Size', 'fl-builder' ),
+							'label'       => __( 'Dot Size', 'tmcbb' ),
 							'default'     => '14',
 							'description' => 'pixels',
 						),
 						'dotColor'                  => array(
 							'type'    => 'color',
-							'label'   => __( 'Dot Color', 'fl-builder' ),
+							'label'   => __( 'Dot Color', 'tmcbb' ),
 							'default' => '000000',
 						),
 						'dotBackgroundColor'        => array(
 							'type'       => 'color',
-							'label'      => __( 'Dot Background Color', 'fl-builder' ),
+							'label'      => __( 'Dot Background Color', 'tmcbb' ),
 							'show_reset' => true,
 						),
 						'dotActiveColor'            => array(
 							'type'    => 'color',
-							'label'   => __( 'Dot Active Color', 'fl-builder' ),
+							'label'   => __( 'Dot Active Color', 'tmcbb' ),
 							'default' => 'ffffff',
 						),
 						'dotActiveBackgroundColor'  => array(
 							'type'       => 'color',
-							'label'      => __( 'Dot Active Background Color', 'fl-builder' ),
+							'label'      => __( 'Dot Active Background Color', 'tmcbb' ),
 							'default'    => '333333',
 							'show_reset' => true,
 						),
 						'dotHoverColor'             => array(
 							'type'    => 'color',
-							'label'   => __( 'Dot Hover Color', 'fl-builder' ),
+							'label'   => __( 'Dot Hover Color', 'tmcbb' ),
 							'default' => 'ffffff',
 						),
 						'dotHoverBackgroundColor'   => array(
 							'type'       => 'color',
-							'label'      => __( 'Dot Hover Background Color', 'fl-builder' ),
+							'label'      => __( 'Dot Hover Background Color', 'tmcbb' ),
 							'default'    => '689BCA',
 							'show_reset' => true,
 						),
@@ -303,19 +306,19 @@ FLBuilder::register_module(
 				),
 			),
 		),
-		'multiple'      => array( // Tab
-			'title'    => __( 'Settings', 'fl-builder' ), // Tab title
-			'sections' => array( // Tab Sections
-				'general' => array( // Section
-					'title'  => __( 'Overall Settings', 'fl-builder' ), // Section Title
-					'fields' => array( // Section Fields
+		'multiple'      => array(
+			'title'    => __( 'Settings', 'tmcbb' ),
+			'sections' => array(
+				'general' => array(
+					'title'  => __( 'Overall Settings', 'tmcbb' ),
+					'fields' => array(
 						'adaptiveHeight'   => array(
 							'type'    => 'select',
-							'label'   => __( 'Adaptive Height', 'fl-builder' ),
+							'label'   => __( 'Adaptive Height', 'tmcbb' ),
 							'default' => 'false',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 							'toggle'  => array(
 								'false' => array(
@@ -325,36 +328,36 @@ FLBuilder::register_module(
 						),
 						'fixedHeightSize'  => array(
 							'type'        => 'text',
-							'label'       => __( 'Fixed Height Size', 'fl-builder' ),
+							'label'       => __( 'Fixed Height Size', 'tmcbb' ),
 							'default'     => '500',
 							'description' => 'pixels',
 						),
 						'fade'             => array(
 							'type'    => 'select',
-							'label'   => __( 'Fade', 'fl-builder' ),
-							'help'    => __( 'For images only.', 'fl-builder' ),
+							'label'   => __( 'Fade', 'tmcbb' ),
+							'help'    => __( 'For images only.', 'tmcbb' ),
 							'default' => 'false',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 						),
 						'infinite'         => array(
 							'type'    => 'select',
-							'label'   => __( 'Infinite Loop', 'fl-builder' ),
+							'label'   => __( 'Infinite Loop', 'tmcbb' ),
 							'default' => 'true',
 							'options' => array(
-								'true'  => __( 'Yes', 'fl-builder' ),
-								'false' => __( 'No', 'fl-builder' ),
+								'true'  => __( 'Yes', 'tmcbb' ),
+								'false' => __( 'No', 'tmcbb' ),
 							),
 						),
 						'verticalCarousel' => array(
 							'type'    => 'select',
-							'label'   => __( 'Scroll', 'fl-builder' ),
+							'label'   => __( 'Scroll', 'tmcbb' ),
 							'default' => 'false',
 							'options' => array(
-								'true'  => __( 'Vertical', 'fl-builder' ),
-								'false' => __( 'Horizontal', 'fl-builder' ),
+								'true'  => __( 'Vertical', 'tmcbb' ),
+								'false' => __( 'Horizontal', 'tmcbb' ),
 							),
 							'toggle'  => array(
 								'false' => array(
