@@ -1,4 +1,7 @@
 <?php
+/**
+ * BBSlickSlider Class file.
+ */
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -6,72 +9,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @class BBSlickSlider
+ * Class BBSlickSlider
  */
 class BBSlickSlider extends FLBuilderModule {
 
 	/**
-	 * Constructor function for the module. You must pass the
-	 * name, description, dir and url in an array to the parent class.
-	 *
-	 * @method __construct
+	 * BBSlickSlider constructor.
 	 */
 	public function __construct() {
-		parent::__construct(array(
-			'name'          => __( 'Slick', 'fl-builder' ),
-			'description'   => __( 'Slick Slider for BeaverBuilder', 'fl-builder' ),
-			'category'      => __( 'Advanced Modules', 'fl-builder' ),
-			'dir'           => TMC_BB_DIR . 'slick/',
-			'url'           => TMC_BB_URL . 'slick/',
-			'editor_export' => true, // Defaults to true and can be omitted.
-			'enabled'       => true, // Defaults to true and can be omitted.
-		));
 
-		/**
-		 * Use these methods to enqueue css and js already
-		 * registered or to register and enqueue your own.
-		 */
-		// Already registered
+		parent::__construct(
+			array(
+				'name'          => __( 'Slick', 'fl-builder' ),
+				'description'   => __( 'Slick Slider for BeaverBuilder', 'fl-builder' ),
+				'category'      => __( 'Advanced Modules', 'fl-builder' ),
+				'dir'           => TMC_BB_DIR . 'slick/',
+				'url'           => TMC_BB_URL . 'slick/',
+			)
+		);
+
 		$this->add_css( 'font-awesome' );
+
 		$this->add_js( 'jquery-bxslider' );
 
-		// Register and enqueue your own
 		$this->add_css( 'slick-slider-css-cdn', '//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css', array(), '' );
+
 		$this->add_js( 'slick-slider-js-cdn', TMC_BB_URL . '/slick/js/slick.js', array( 'jquery' ), '', false );
-
-	}
-
-	/**
-	 * Use this method to work with settings data before
-	 * it is saved. You must return the settings object.
-	 *
-	 * @method update
-	 * @param $settings {object}
-	 */
-	public function update( $settings ) {
-		$settings->textarea_field .= ' - this text was appended in the update method.';
-		return $settings;
-	}
-
-	/**
-	 * This method will be called by the builder
-	 * right before the module is deleted.
-	 *
-	 * @method delete
-	 */
-	public function delete() {
-
-	}
-
-	/**
-	 * Add additional methods to this class for use in the
-	 * other module files such as preview.php, frontend.php
-	 * and frontend.css.php.
-	 *
-	 *
-	 * @method example_method
-	 */
-	public function example_method() {
 	}
 
 	/* ---------------------------------------------------------------------
