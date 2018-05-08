@@ -48,9 +48,15 @@ add_action( 'init', 'tmcbb_load_modules' );
  * Adds video attributes query strings to embedded YouTube videos.
  *
  * @filter oembed_result
+ *
+ * @param string $data The returned oEmbed HTML.
+ * @param string $url  URL of the content to be embedded.
+ * @param array  $args Optional arguments, usually passed from a shortcode.
+ *
+ * @return string
  */
-function tmcbb_oembed_result( $html, $url, $args ) {
-	return str_replace( '?feature=oembed', '?feature=oembed&loop=1&controls=0&showinfo=0&rel=0&enablejsapi=1', $html );
+function tmcbb_oembed_result( $data, $url, $args ) {
+	return str_replace( '?feature=oembed', '?feature=oembed&loop=1&controls=0&showinfo=0&rel=0&enablejsapi=1', $data );
 }
 
 add_filter( 'oembed_result', 'tmcbb_oembed_result', 10, 3 );
@@ -59,21 +65,34 @@ add_filter( 'oembed_result', 'tmcbb_oembed_result', 10, 3 );
  * Adds video attributes query strings to embedded Vimeo videos.
  *
  * @filter oembed_fetch_url
+ *
+ * @param string $provider URL of the oEmbed provider.
+ * @param string $url      URL of the content to be embedded.
+ * @param array  $args     Optional arguments, usually passed from a shortcode.
+ *
+ * @return string
  */
 function tmcbb_add_video_args( $provider, $url, $args ) {
-	if ( strpos( $provider, '//vimeo.com/' ) !== false ) {
-		$args     = array(
-			'title'       => 0,
-			'byline'      => 0,
-			'portrait'    => 0,
-			'badge'       => 0,
-			//'autoplay' => 1,
-			'loop'        => 1,
-			'transparent' => 0,
-		);
-		$provider = add_query_arg( $args, $provider );
+
+	if ( false === strpos( $provider, '//vimeo.com/' ) ) {
+		return $provider;
 	}
-	return $provider;
+
+	/**
+	 * Query args for Vimeo URL.
+	 *
+	 * @var array $query_args
+	 */
+	$query_args = array(
+		'title'       => 0,
+		'byline'      => 0,
+		'portrait'    => 0,
+		'badge'       => 0,
+		'loop'        => 1,
+		'transparent' => 0,
+	);
+
+	return add_query_arg( $query_args, $provider );
 }
 
 add_filter( 'oembed_fetch_url', 'tmcbb_add_video_args', 10, 3 );
