@@ -30,7 +30,7 @@ define( 'TMC_BB_URL', plugins_url( '/', __FILE__ ) );
 /**
  * Load our plugin's custom modules.
  */
-function fl_load_module_bbtwistermc() {
+function tmcbb_load_modules() {
 
 	if ( ! class_exists( 'FLBuilder' ) ) {
 		return;
@@ -40,22 +40,21 @@ function fl_load_module_bbtwistermc() {
 	require_once TMC_BB_DIR . 'fullImage/fullImage.php';
 }
 
-add_action( 'init', 'fl_load_module_bbtwistermc' );
+add_action( 'init', 'tmcbb_load_modules' );
 
 /**
  * Adds video attributes query strings to embedded YouTube videos
  */
-add_filter( 'oembed_result', 'oembed_result', 10, 3 );
-
-function oembed_result( $html, $url, $args ) {
+function tmcbb_oembed_result( $html, $url, $args ) {
 	return str_replace( '?feature=oembed', '?feature=oembed&loop=1&controls=0&showinfo=0&rel=0&enablejsapi=1', $html );
 }
+
+add_filter( 'oembed_result', 'tmcbb_oembed_result', 10, 3 );
 
 /**
  * Adds video attributes query strings to embedded Vimeo videos
  */
-add_filter( 'oembed_fetch_url', 'add_video_args', 10, 3 );
-function add_video_args( $provider, $url, $args ) {
+function tmcbb_add_video_args( $provider, $url, $args ) {
 	if ( strpos( $provider, '//vimeo.com/' ) !== false ) {
 		$args     = array(
 			'title'       => 0,
@@ -70,3 +69,5 @@ function add_video_args( $provider, $url, $args ) {
 	}
 	return $provider;
 }
+
+add_filter( 'oembed_fetch_url', 'tmcbb_add_video_args', 10, 3 );
