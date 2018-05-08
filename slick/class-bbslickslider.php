@@ -240,7 +240,7 @@ FLBuilder::register_module(
 							'type'        => 'text',
 							'label'       => __( 'Arrow Size', 'tmcbb' ),
 							'default'     => '20',
-							'description' => 'pixels',
+							'description' => __( 'pixels', 'tmcbb' ),
 						),
 						'arrowColor'                => array(
 							'type'    => 'color',
@@ -268,7 +268,7 @@ FLBuilder::register_module(
 							'type'        => 'text',
 							'label'       => __( 'Dot Size', 'tmcbb' ),
 							'default'     => '14',
-							'description' => 'pixels',
+							'description' => __( 'pixels', 'tmcbb' ),
 						),
 						'dotColor'                  => array(
 							'type'    => 'color',
@@ -330,7 +330,7 @@ FLBuilder::register_module(
 							'type'        => 'text',
 							'label'       => __( 'Fixed Height Size', 'tmcbb' ),
 							'default'     => '500',
-							'description' => 'pixels',
+							'description' => __( 'pixels', 'tmcbb' ),
 						),
 						'fade'             => array(
 							'type'    => 'select',
