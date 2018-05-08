@@ -1,3 +1,12 @@
+<?php
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+?>
+
 <div class="fl-builder-settings-section">
             
     <h3 class="fl-builder-settings-title"><?php _e('Include Example', 'fl-builder'); ?></h3>

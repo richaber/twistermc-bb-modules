@@ -1,3 +1,4 @@
+<?php
 /**
  * This file should contain frontend styles that
  * will be applied to individual module instances.
@@ -10,6 +11,13 @@
  *
  * Example:
  */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+?>
 
 <?php if ($settings->forceImageSize == 'true') { ?>
 .fl-node-<?php echo $id; ?> .tm_bb_fullImage img {

@@ -7,7 +7,14 @@
  * Author: TwisterMc
  * Author URI: http://www.twistermc.com
  */
+
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 define( 'TMC_BB_DIR', plugin_dir_path( __FILE__ ) );
+
 define( 'TMC_BB_URL', plugins_url( '/', __FILE__ ) );
 
 /**
