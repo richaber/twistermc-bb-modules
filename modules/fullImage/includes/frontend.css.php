@@ -1,15 +1,18 @@
 <?php
 /**
- * This file should contain frontend styles that
- * will be applied to individual module instances.
+ * BBFullImage "frontend CSS" file.
  *
- * You have access to three variables in this file:
+ * Used by Beaver Builder to generate frontend styles that will be applied to individual module instances.
  *
- * $module An instance of your module class.
- * $id The module's ID.
- * $settings The module's settings.
+ * @see     \BBFullImage
  *
- * Example:
+ * @link    https://kb.wpbeaverbuilder.com/article/600-cmdg-05-module-html
+ *
+ * @var \BBFullImage $module   An instance of the module class.
+ * @var string       $id       The module's node ID ( i.e. $module->node ).
+ * @var stdClass     $settings The module's settings ( i.e. $module->settings ).
+ *
+ * @package TwisterMcBBModules
  */
 
 // Exit if accessed directly.

@@ -1,12 +1,19 @@
 <?php
 /**
- * This file should be used to render each module instance.
- * You have access to two variables in this file:
+ * BBFullImage "frontend HTML" file.
  *
- * $module An instance of your module class.
- * $settings The module's settings.
+ * Used by Beaver Builder to generate the markup output.
  *
- * Example:
+ * @see     \BBFullImage
+ * @see     \FLBuilderModule
+ *
+ * @link    https://kb.wpbeaverbuilder.com/article/600-cmdg-05-module-html
+ *
+ * @var \BBFullImage $module   An instance of the module class.
+ * @var string       $id       The module's node ID ( i.e. $module->node ).
+ * @var stdClass     $settings The module's settings ( i.e. $module->settings ).
+ *
+ * @package TwisterMcBBModules
  */
 
 // Exit if accessed directly.
@@ -14,8 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-    $image = get_post($settings->photo_field);
-    $image_caption = $image->post_excerpt;
+$image         = get_post( $settings->photo_field );
+$image_caption = $image->post_excerpt;
 
 ?>
 
@@ -28,5 +35,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php if ($settings->showCaption == 'true') { ?>
     <div class="tm_bb_fullImage_caption"><?php echo $image_caption; ?></div>
 <?php } ?>
-
-
