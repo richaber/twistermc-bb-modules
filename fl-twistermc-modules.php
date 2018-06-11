@@ -8,10 +8,10 @@
  * Author URI: http://www.twistermc.com
  * License:      GPL2
  * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:  tmcbb
+ * Text Domain:  tmcbbm
  * Domain Path:  /languages
  *
- * @package TwisterMcBBModules
+ * @package TwisterMC_BB_Modules
  */
 
 // Exit if accessed directly.
@@ -20,101 +20,91 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * The full directory path to the main plugin file, with trailing slash.
+ * The full path and filename of this file.
  *
- * @var string TMC_BB_DIR
+ * Example: /webroot/wp-content/plugins/twistermc-bb-modules/fl-twistermc-modules.php
+ *
+ * @var string TMCBBM_FILE
  */
-define( 'TMC_BB_DIR', dirname( __FILE__ ) . '/' );
+define( 'TMCBBM_FILE', __FILE__ );
 
 /**
- * The full URL to the main plugin file, with trailing slash.
+ * The full directory path to the main plugin file, with trailing slash.
  *
- * @var string HCMCSEARCH_PLUGIN_URL
+ * Example: /webroot/wp-content/plugins/twistermc-bb-modules/
+ *
+ * @var string TMCBBM_DIR
  */
-define( 'TMC_BB_URL', plugins_url( '/', __FILE__ ) );
+define( 'TMCBBM_DIR', dirname( TMCBBM_FILE ) . '/' );
+
+/**
+ * The "basename" of this plugin.
+ *
+ * Example: twistermc-bb-modules/fl-twistermc-modules.php
+ *
+ * @var string TMCBBM_BASENAME
+ */
+define( 'TMCBBM_BASENAME', plugin_basename( TMCBBM_FILE ) );
 
 /**
  * The relative path to this plugin directory, from WP_PLUGIN_DIR, with trailing slash.
  *
- * @var string TMC_BB_REL_DIR
+ * Example: twistermc-bb-modules/
+ *
+ * @var string TMCBBM_REL_DIR
  */
-define( 'TMC_BB_REL_DIR', basename( TMC_BB_DIR ) . '/' );
+define( 'TMCBBM_REL_DIR', basename( TMCBBM_DIR ) . '/' );
 
 /**
- * Setup the plugin text domain for gettext i18n/l10n.
+ * The full URL to the main plugin directory, with trailing slash.
+ *
+ * Example: http://example.com/wp-content/plugins/twistermc-bb-modules/
+ *
+ * @var string TMCBBM_URL
  */
-function tmcbb_load_textdomain() {
-	load_plugin_textdomain( 'tmcbb', false, TMC_BB_REL_DIR . 'languages/' );
-}
-
-add_action( 'init', 'tmcbb_load_textdomain', 0 );
+define( 'TMCBBM_URL', plugins_url( '/', TMCBBM_FILE ) );
 
 /**
- * Load our plugin's custom modules.
+ * Include our Admin Notices helper class.
  *
- * @action init
+ * This is a framework for displaying admin notices.
  */
-function tmcbb_load_modules() {
-
-	if ( ! class_exists( 'FLBuilder' ) ) {
-		return;
-	}
-
-	require_once TMC_BB_DIR . 'slick/class-bbslickslider.php';
-	require_once TMC_BB_DIR . 'fullImage/fullImage.php';
-}
-
-add_action( 'init', 'tmcbb_load_modules' );
+require_once( TMCBBM_DIR . 'classes/class-twistermc-bb-notices.php' );
 
 /**
- * Adds video attributes query strings to embedded YouTube videos.
+ * Include our Required Plugin Notice class.
  *
- * @filter oembed_result
- *
- * @param string $data The returned oEmbed HTML.
- * @param string $url  URL of the content to be embedded.
- * @param array  $args Optional arguments, usually passed from a shortcode.
- *
- * @return string
+ * This is the class for adding a notice when Beaver Builder is not active.
  */
-function tmcbb_oembed_result( $data, $url, $args ) {
-	return str_replace( '?feature=oembed', '?feature=oembed&loop=1&controls=0&showinfo=0&rel=0&enablejsapi=1', $data );
-}
-
-add_filter( 'oembed_result', 'tmcbb_oembed_result', 10, 3 );
+require_once( TMCBBM_DIR . 'classes/class-twistermc-bb-required-plugin-notice.php' );
 
 /**
- * Adds video attributes query strings to embedded Vimeo videos.
+ * Include our DOMDocument helper class.
  *
- * @filter oembed_fetch_url
- *
- * @param string $provider URL of the oEmbed provider.
- * @param string $url      URL of the content to be embedded.
- * @param array  $args     Optional arguments, usually passed from a shortcode.
- *
- * @return string
+ * This is a utility class to ease working with partial markup strings.
  */
-function tmcbb_add_video_args( $provider, $url, $args ) {
+require_once( TMCBBM_DIR . 'classes/class-twistermc-bb-domdocument-utility.php' );
 
-	if ( false === strpos( $provider, '//vimeo.com/' ) ) {
-		return $provider;
-	}
+/**
+ * Include our Main Plugin class.
+ *
+ * This is the main class that drives our plugin, for loading BB modules, firing filter actions, etc.
+ */
+require_once( TMCBBM_DIR . 'classes/class-twistermc-bb-modules.php' );
 
-	/**
-	 * Query args for Vimeo URL.
-	 *
-	 * @var array $query_args
-	 */
-	$query_args = array(
-		'title'       => 0,
-		'byline'      => 0,
-		'portrait'    => 0,
-		'badge'       => 0,
-		'loop'        => 1,
-		'transparent' => 0,
-	);
+/**
+ * Run the plugin.
+ *
+ * Setup instances of the TwisterMC_BB_Notices and TwisterMC_BB_Modules classes.
+ * Sets up the hooks for each to integrate with WordPress.
+ */
+function tmcbbm_run() {
 
-	return add_query_arg( $query_args, $provider );
+	$tmcbbm_notices = TwisterMC_BB_Notices::get_instance();
+	$tmcbbm_notices->setup_hooks();
+
+	$tmcbb_modules = TwisterMC_BB_Modules::get_instance();
+	$tmcbb_modules->setup_hooks();
 }
 
-add_filter( 'oembed_fetch_url', 'tmcbb_add_video_args', 10, 3 );
+add_action( 'plugins_loaded', 'tmcbbm_run', 0 );
