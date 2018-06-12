@@ -16,6 +16,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 class BBSlickSlider extends FLBuilderModule {
 
 	/**
+	 * Instance of the WP_oEmbed object.
+	 *
+	 * @var \WP_oEmbed
+	 */
+	public $oembed;
+
+	/**
+	 * Regex patterns for matching against oEmbed provider URLs.
+	 *
+	 * YouTube and Vimeo patterns are verbatim from WordPress Version 4.9.5 wp_video_shortcode() URL matching pattern.
+	 *
+	 * @see wp_video_shortcode()
+	 *
+	 * @var array $url_regex_patterns Regex patterns for URL matching.
+	 */
+	protected $url_regex_patterns = array(
+		'youtube' => '#^https?://(?:www\.)?(?:youtube\.com/watch|youtu\.be/)#',
+		'vimeo'   => '#^https?://(.+\.)?vimeo\.com/.*#',
+	);
+
+	/**
 	 * BBSlickSlider constructor.
 	 */
 	public function __construct() {
@@ -29,6 +50,8 @@ class BBSlickSlider extends FLBuilderModule {
 				'url'           => TMCBBM_URL . 'slick/',
 			)
 		);
+
+		$this->oembed = _wp_oembed_get_object();
 
 		$this->add_css( 'font-awesome' );
 
