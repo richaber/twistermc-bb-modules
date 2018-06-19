@@ -52,22 +52,33 @@ class BBSlickSlider extends FLBuilderModule {
 		);
 
 		$this->oembed = _wp_oembed_get_object();
-
-		$this->add_css( 'font-awesome' );
-
-		$this->add_css( 'slick-slider-css-cdn', '//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css', array(), '' );
-
-		$this->add_js( 'slick-slider-js-cdn', TMCBBM_URL . '/slick/js/slick.js', array( 'jquery' ), '', false );
 	}
 
 	/**
-	 * Enqueue Vimeo Helper Script
+	 * Enqueue scripts and styles.
 	 *
-	 * @todo This should only be included if we have Vimeo modules.
+	 * @uses \BBSlickSlider::has_youtube_slides(), \BBSlickSlider::has_vimeo_slides()
 	 */
 	public function enqueue_scripts() {
-		if ( $this->settings && 'video' === $this->settings->photoVideo ) {
-			wp_enqueue_script( 'vimeo-helper', '//f.vimeocdn.com/js/froogaloop2.min.js', array(), '3', true );
+
+		$this->add_css( 'font-awesome' );
+
+		$this->add_css( 'slick-style', 'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css' );
+
+		$this->add_js(
+			'slick-script',
+			'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js',
+			array(
+				'jquery',
+			)
+		);
+
+		if ( $this->has_youtube_slides() ) {
+			$this->add_js( 'youtube-iframe-api', 'https://www.youtube.com/iframe_api' );
+		}
+
+		if ( $this->has_vimeo_slides() ) {
+			$this->add_js( 'vimeo-player', 'https://player.vimeo.com/api/player.js' );
 		}
 	}
 
