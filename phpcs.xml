@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="TwisterMc BB Modules Coding Standards">
+
+	<description>A customized set of WPCS rules to check TwisterMc BB Modules plugin.</description>
+
+	<rule ref="WordPress-Core"/>
+	<rule ref="WordPress-Extra"/>
+    <rule ref="WordPress-Docs"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array" value="tmcbbm"/>
+		</properties>
+	</rule>
+
+    <rule ref="WordPress-Extra">
+        <exclude name="WordPress.NamingConventions.ValidVariableName" />
+    </rule>
+
+</ruleset>
