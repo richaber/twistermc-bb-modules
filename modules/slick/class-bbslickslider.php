@@ -792,6 +792,27 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Get the 'types' of slides that exist.
+	 *
+	 * Returns array of strings from 'slide_type_select'.
+	 * Currently 'image' or 'embed'.
+	 *
+	 * @uses \BBSlickSlider::get_slides()
+	 *
+	 * @return array
+	 */
+	public function get_slide_types() {
+
+		$slides = $this->get_slides();
+
+		if ( empty( $slides ) ) {
+			return array();
+		}
+
+		return wp_list_pluck( $slides, 'slide_type_select' );
+	}
+
+	/**
 	 * Conditional check if the provided slide is an image slide.
 	 *
 	 * @param \stdClass $slide A stdClass "slide" object to test.
