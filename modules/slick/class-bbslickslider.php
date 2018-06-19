@@ -822,6 +822,43 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Conditional check to see if embed slides for the given oembed provider exist.
+	 *
+	 * @uses \BBSlickSlider::has_embed_slides(),
+	 * @uses \BBSlickSlider::get_oembed_url_pattern_by_provider_name(), \BBSlickSlider::get_embed_slides_urls()
+	 *
+	 * @param string $provider A supported oembed provider name. Valid values are 'youtube' or 'vimeo'.
+	 *
+	 * @return bool
+	 */
+	public function has_embed_provider_slides( $provider = 'youtube' ) {
+
+		if ( ! $this->has_embed_slides() ) {
+			return false;
+		}
+
+		$pattern = $this->get_oembed_url_pattern_by_provider_name( $provider );
+
+		if ( empty( $pattern ) ) {
+			return false;
+		}
+
+		$embed_slides_urls = $this->get_embed_slides_urls();
+
+		if ( empty( $embed_slides_urls ) ) {
+			return false;
+		}
+
+		$matches = preg_grep( $pattern, $embed_slides_urls );
+
+		if ( ! empty( $matches ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get the slides from the module's settings.
 	 *
 	 * @uses \BBSlickSlider::has_slides()
