@@ -589,7 +589,7 @@ class BBSlickSlider extends FLBuilderModule {
 	 *
 	 * @return string
 	 */
-	public function get_oembed_provider( $url ) {
+	public function get_oembed_provider_name( $url ) {
 
 		foreach ( $this->get_oembed_url_patterns() as $provider_name => $oembed_url_pattern ) {
 
@@ -599,5 +599,20 @@ class BBSlickSlider extends FLBuilderModule {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Get the default query args for adding to our YouTube oEmbed call.
+	 *
+	 * @return array
+	 */
+	public function get_youtube_default_query_args() {
+		return array(
+			'controls'    => 0,
+			'showinfo'    => 0,
+			'loop'        => 1,
+			'rel'         => 0,
+			'enablejsapi' => 1,
+		);
 	}
 }
