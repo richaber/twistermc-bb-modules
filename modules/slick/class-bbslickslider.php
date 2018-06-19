@@ -43,9 +43,9 @@ class BBSlickSlider extends FLBuilderModule {
 
 		parent::__construct(
 			array(
-				'name'          => __( 'Slick', 'tmcbb' ),
-				'description'   => __( 'Slick Slider for BeaverBuilder', 'tmcbb' ),
-				'category'      => __( 'Advanced Modules', 'tmcbb' ),
+				'name'          => __( 'Slick', 'tmcbbm' ),
+				'description'   => __( 'Slick Slider for BeaverBuilder', 'tmcbbm' ),
+				'category'      => __( 'Advanced Modules', 'tmcbbm' ),
 				'dir'           => TMCBBM_DIR . 'modules/slick/',
 				'url'           => TMCBBM_URL . 'modules/slick/',
 			)
