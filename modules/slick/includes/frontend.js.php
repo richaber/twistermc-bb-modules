@@ -1,15 +1,17 @@
 <?php
 /**
- * This file should contain frontend JavaScript that
- * will be applied to individual module instances.
+ * BBSlickSlider "frontend JS" file.
  *
- * You have access to three variables in this file:
+ * Used by Beaver Builder to generate frontend JavaScript that will be applied to individual module instances.
+ * NOTE: Try not to mix in too much PHP with the JS, it's too confusing.
  *
- * $module An instance of your module class.
- * $id The module's ID.
- * $settings The module's settings.
+ * @see     \BBSlickSlider
  *
- * Example:
+ * @var \BBSlickSlider $module   An instance of the module class.
+ * @var string         $id       The module's node ID ( i.e. $module->node ).
+ * @var stdClass       $settings The module's settings ( i.e. $module->settings ).
+ *
+ * @package TwisterMcBBModules
  */
 
 // Exit if accessed directly.
@@ -17,172 +19,305 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * If we don't have any slides, echo an empty string and return.
+ * BB expects some kind of output for building caches and such.
+ * If you return without any kind of output, it will cause a fatal error.
+ */
+if ( ! $module->has_slides() ) {
+
+	echo '';
+
+	return;
+}
+
+// @codingStandardsIgnoreStart
+
 ?>
 
-(function($){
+(function( $ ) {
 
-var $slickSlider_bb = $(".fl-node-<?php echo $id; ?> .slickWrapper_bb");
-var $slickSlider_bb_pauseButton = $(".fl-node-<?php echo $id; ?> .js-slickModule_bb_Pause");
-var $slickSlider_bb_autoplay = <?php echo $settings->autoPlay; ?>;
-var $slickSlider_bb_autoplaySpeed = <?php echo $settings->autoPlaySpeed; ?>;
-var $slickSlider_bb_adaptiveHeight = <?php echo $settings->adaptiveHeight; ?>;
-var $slickSlider_bb_arrows = <?php echo $settings->arrows; ?>;
-var $slickSlider_bb_dots = <?php echo $settings->dots; ?>;
-var $slickSlider_bb_pauseOnHover = <?php echo $settings->pauseOnHover; ?>;
-var $slickSlider_bb_pauseOnDotsHover = <?php echo $settings->pauseOnDotsHover; ?>;
-var $slickSlider_bb_variableWidth = <?php echo $settings->variableWidth; ?>;
-var $slickSlider_bb_centerMode = <?php echo $settings->centerMode; ?>;
-var $slickSlider_bb_fade = <?php echo $settings->fade; ?>;
-var $slickSlider_bb_infinite = <?php echo $settings->infinite; ?>;
-var $slickSlider_bb_slidesToShow = <?php echo $settings->slidesToShow; ?>;
-var $slickSlider_bb_slidesToScroll = <?php echo $settings->slidesToScroll; ?>;
-var $slickSlider_bb_oneSlide = <?php echo $settings->oneSlide; ?>;
-var $slickSlider_bb_verticalCarousel = <?php echo $settings->verticalCarousel; ?>;
+	/**
+	 * The node ID for this slider.
+	 *
+	 * @type {string}
+	 */
+	var slickNode = '<?php echo esc_attr( $id ) ?>';
 
-    <?php if ($settings->photoVideo === 'video' && $settings->autoplay_videos === 'true' && !FLBuilderModel::is_builder_active()) { ?>
-        $slickSlider_bb.on('init', function(event, slick){
-            var srcVideo = $("iframe", slick.$slides[0])[0].src;
-            isYouTubeVideo = srcVideo.includes('youtube');
-            isVimeoVideo = srcVideo.includes('vimeo');
+	/**
+	 * Whether this module is configured to autoplay videos.
+	 *
+	 * @type {boolean}
+	 */
+	var slickAutoplayVideos = <?php echo esc_attr( $settings->autoplay_videos ); ?>;
 
-            function callback(isYouTubeVideo,isVimeoVideo){
-                // YouTube
-                if (isYouTubeVideo == true) {
-                    $("iframe", slick.$slides[0])[0].contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', '*');
-                }
+	/**
+	 * The Slick Slider settings object.
+	 *
+	 * @type {Object}
+	 */
+	var slickSettings = <?php $module->the_slick_settings_object(); ?>;
 
-                // Vimeo
-                if (isVimeoVideo == true) {
-                    var iframe = $("iframe", slick.$slides[0])[0];
-                    var player = $f(iframe);
-                    player.api('play');
-                }
+	/**
+	 * Slider autoplay carousel flag.
+	 *
+	 * This is the original autoplay setting, before we apply any 'pausing' in init.
+	 *
+	 * @type {boolean}
+	 */
+	var slickSettingsAutoplay = slickSettings.autoplay;
 
-            }
-             /* Attempt to auto play the first slide video. */
-            setTimeout(function() {
-                callback(isYouTubeVideo,isVimeoVideo);
-            }, 5000);
-        });
-    <?php } ?>
+	/**
+	 * Slide data.
+	 *
+	 * @type {Object}
+	 */
+	var slickSlides = <?php $module->the_slick_slides_object(); ?>;
 
-    /* we have to setup the slider based on the number of slides we're showing and scrolling */
-    if ($slickSlider_bb_oneSlide == true) {
-        $slickSlider_bb.slick({
-            autoplay: $slickSlider_bb_autoplay,
-            autoplaySpeed: $slickSlider_bb_autoplaySpeed,
-            arrows: $slickSlider_bb_arrows,
-            dots: $slickSlider_bb_dots,
-            pauseOnHover: $slickSlider_bb_pauseOnHover,
-            pauseOnDotsHover: $slickSlider_bb_pauseOnDotsHover,
-            vertical: $slickSlider_bb_verticalCarousel,
-            infinite: $slickSlider_bb_infinite,
-            adaptiveHeight: $slickSlider_bb_adaptiveHeight
-        });
-    } else {
-        $slickSlider_bb.slick({
-            autoplay: $slickSlider_bb_autoplay,
-            autoplaySpeed: $slickSlider_bb_autoplaySpeed,
-            arrows: $slickSlider_bb_arrows,
-            dots: $slickSlider_bb_dots,
-            pauseOnHover: $slickSlider_bb_pauseOnHover,
-            pauseOnDotsHover: $slickSlider_bb_pauseOnDotsHover,
-            vertical: $slickSlider_bb_verticalCarousel,
-            infinite: $slickSlider_bb_infinite,
-            slidesToShow: $slickSlider_bb_slidesToShow,
-            slidesToScroll: $slickSlider_bb_slidesToScroll,
-            variableWidth: $slickSlider_bb_variableWidth,
-            centerMode: $slickSlider_bb_centerMode
-        });
-    }
+	/**
+	 * Builder Interface active flag.
+	 *
+	 * @type {boolean}
+	 */
+	var builderActive = jQuery( 'body' ).hasClass( 'fl-builder-edit' );
 
-    $ss_nextArrow = '<button class="fa fa-chevron-right slick-arrow slick-next" aria-hidden="true"><span class="tmc_isVisibilyHidden">Next</span></button>';
-    $ss_prevArrow = '<button class="fa fa-chevron-left slick-arrow slick-prev" aria-hidden="true"><span class="tmc_isVisibilyHidden">Previous</span></button>';
-    $ss_downArrow = '<button class="fa fa-chevron-down slick-arrow slick-next" aria-hidden="true"><span class="tmc_isVisibilyHidden">Next</span></button>';
-    $ss_upArrow = '<button class="fa fa-chevron-up slick-arrow slick-prev" aria-hidden="true"><span class="tmc_isVisibilyHidden">Previous</span></button>';
+	/**
+	 * The target wrapper for this slider.
+	 *
+	 * @type {string}
+	 */
+	var slickSlider = jQuery( '.fl-node-' + slickNode + ' .slickWrapper_bb' );
 
+	/**
+	 * The target for this slider's pause button.
+	 *
+	 * @type {string}
+	 */
+	var pauseButton = jQuery( '.fl-node-' + slickNode + ' .js-slickModule_bb_Pause' );
 
-    /* only use fade setting when using a horizontal carousel */
-    if ($slickSlider_bb_verticalCarousel == false) {
-        $slickSlider_bb.slick("slickSetOption", "fade", $slickSlider_bb_fade, false);
-        $slickSlider_bb.slick("slickSetOption", "nextArrow", $ss_nextArrow, true);
-        $slickSlider_bb.slick("slickSetOption", "prevArrow", $ss_prevArrow, true);
-    } else {
-        $slickSlider_bb.slick("slickSetOption", "nextArrow", $ss_downArrow, true);
-        $slickSlider_bb.slick("slickSetOption", "prevArrow", $ss_upArrow, true);
-    }
+	/**
+	 * Video API load delay.
+	 *
+	 * @type {number}
+	 */
+	var videoApiLoadingDelay = 2000;
 
-    if ($slickSlider_bb_autoplay === false) {
-        $slickSlider_bb_pauseButton.addClass('paused');
-        $slickSlider_bb_pauseButton.addClass('fa-play-circle');
-        $slickSlider_bb_pauseButton.removeClass('fa-pause-circle');
-    }
+	/**
+	 * Video API load delay.
+	 *
+	 * @type {number}
+	 */
+	var resumeAutoplayDelay = 1000;
 
-    $slickSlider_bb_pauseButton.on( "click", function() {
-        if ($slickSlider_bb_pauseButton.hasClass('paused')) {
-            $slickSlider_bb_pauseButton.removeClass('paused');
-            $slickSlider_bb_pauseButton.removeClass('fa-play-circle');
-            $slickSlider_bb_pauseButton.addClass('fa-pause-circle');
-            $slickSlider_bb.slick('slickPlay');
-        } else {
-            $slickSlider_bb_pauseButton.addClass('paused');
-            $slickSlider_bb_pauseButton.addClass('fa-play-circle');
-            $slickSlider_bb_pauseButton.removeClass('fa-pause-circle');
-            $slickSlider_bb.slick('slickPause');
-        }
+	/**
+	 * Type of the first slide.
+	 *
+	 * @type {string}
+	 */
+	var firstSlideType = slickSlides[0].type;
 
-    });
+	/**
+	 * There's a slight delay before YouTube APIs are "ready".
+	 */
+	if ( true !== builderActive && true === slickAutoplayVideos && true === slickSettingsAutoplay && 'youtube' === firstSlideType ) {
+		slickSettings.autoplay = false;
+	}
 
-    <?php if ($settings->photoVideo === 'video') { ?>
-    /* ---------------------------------------------------------------------
-     Pause videos when changing slides
-     Author: Thomas McMahon
-     ------------------------------------------------------------------------ */
-    $slickSlider_bb.on('beforeChange', function(event, slick, currentSlide, nextSlide){
-        $('iframe').each(function(){
-            var srcVideo = $(this)[0].src;
-            isYouTubeVideo = srcVideo.includes('youtube');
-            isVimeoVideo = srcVideo.includes('vimeo');
+	/**
+	 * Change the pause button appearance on load.
+	 */
+	if ( true !== slickSettingsAutoplay ) {
+		pauseButton.addClass( 'paused' );
+		pauseButton.addClass( 'fa-play-circle' );
+		pauseButton.removeClass( 'fa-pause-circle' );
+	}
 
-            // YouTube
-            if (isYouTubeVideo == true) {
-                $(this)[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
-            }
+	/**
+	 * Bind the init Slick event handler before calling slick.
+	 */
+	slickSlider.on( 'init', function( event, slick ) {
 
-            // Vimeo
-            if (isVimeoVideo == true) {
-                var iframe = $(this)[0];
-                var player = $f(iframe);
-                player.api('pause');
-            }
-        });
-    });
+		/**
+		 * Do not autoplay videos while the builder is active, or if the slider was not configured for autoplaying videos.
+		 */
+		if ( true === builderActive || true !== slickAutoplayVideos ) {
+			return;
+		}
 
-    /* ---------------------------------------------------------------------
-     Auto play current slide video
-     Author: Thomas McMahon
-     ------------------------------------------------------------------------ */
-    <?php if ($settings->autoplay_videos === 'true') { ?>
-    $slickSlider_bb.on('afterChange', function(event, slick, currentSlide, nextSlide){
-        var srcVideo = $("iframe", slick.$slides[currentSlide])[0].src;
-        isYouTubeVideo = srcVideo.includes('youtube');
-        isVimeoVideo = srcVideo.includes('vimeo');
+		var slide = slick.$slides[ 0 ];
 
-        // YouTube
-        if (isYouTubeVideo == true) {
-            $("iframe", slick.$slides[currentSlide])[0].contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', '*');
-        }
+		var iframes = jQuery( slide ).find( 'iframe' );
 
-        // Vimeo
-        if (isVimeoVideo == true) {
-            var iframe = $("iframe", slick.$slides[currentSlide])[0];
-            var player = $f(iframe);
-            player.api('play');
-        }
+		var iframe = iframes[ 0 ];
 
-    });
-    <?php } ?>
-    <?php } ?>
+		if ( 'vimeo' === firstSlideType ) {
+			playVimeo( iframe );
+		}
 
+		if ( 'youtube' === firstSlideType ) {
 
-})(jQuery);
+			/**
+			 * Wait a couple seconds to make sure the YouTube API has finished loading to autoplay the video.
+			 * YouTube API appears to be significantly slower than Vimeo API.
+			 */
+			setTimeout(
+				function() {
+
+					playYouTube( iframe );
+
+					/**
+					 * If the slider itself was set to autoplay, reset that option and resume slider playing.
+					 */
+					if ( true === slickSettingsAutoplay ) {
+
+						setTimeout(
+
+							function() {
+								slick.setOption( 'autplay', true );
+								slick.slickPlay();
+							},
+							resumeAutoplayDelay
+						);
+					}
+				},
+				videoApiLoadingDelay
+			);
+		}
+	} );
+
+	/**
+	 * Bind the beforeChange Slick event handler.
+	 */
+	slickSlider.on( 'beforeChange', function( event, slick, currentSlide, nextSlide ) {
+
+		var slide = slick.$slides[ currentSlide ];
+
+		var type = jQuery( slide ).data( 'type' );
+
+		if ( 'youtube' !== type && 'vimeo' !== type ) {
+			return;
+		}
+
+		var iframes = jQuery( slide ).find( 'iframe' );
+
+		if ( !iframes.length ) {
+			return;
+		}
+
+		var iframe = iframes[ 0 ];
+
+		if ( 'youtube' === type ) {
+			pauseYouTube( iframe );
+		}
+
+		if ( 'vimeo' === type ) {
+			pauseVimeo( iframe );
+		}
+
+	} );
+
+	/**
+	 * Bind the afterChange Slick event handler.
+	 */
+	slickSlider.on( 'afterChange', function( event, slick, currentSlide ) {
+
+		/**
+		 * Do not autoplay videos while the builder is active, or if the slider was not configured for autoplaying videos.
+		 */
+		if ( true === builderActive || true !== slickAutoplayVideos ) {
+			return;
+		}
+
+		var slide = slick.$slides[ currentSlide ];
+
+		var type = jQuery( slide ).data( 'type' );
+
+		if ( 'youtube' !== type && 'vimeo' !== type ) {
+			return;
+		}
+
+		var iframes = jQuery( slide ).find( 'iframe' );
+
+		if ( !iframes.length ) {
+			return;
+		}
+
+		var iframe = iframes[ 0 ];
+
+		if ( 'youtube' === type ) {
+			playYouTube( iframe );
+		}
+
+		if ( 'vimeo' === type ) {
+			playVimeo( iframe );
+		}
+
+	} );
+
+	/**
+	 * Run Slick.
+	 */
+	slickSlider.slick( slickSettings );
+
+	/**
+	 * Change the pause button appearance on click.
+	 */
+	pauseButton.on( 'click', function() {
+		if ( pauseButton.hasClass( 'paused' ) ) {
+			pauseButton.removeClass( 'paused' );
+			pauseButton.removeClass( 'fa-play-circle' );
+			pauseButton.addClass( 'fa-pause-circle' );
+			slickSlider.slick( 'slickPlay' );
+		} else {
+			pauseButton.addClass( 'paused' );
+			pauseButton.addClass( 'fa-play-circle' );
+			pauseButton.removeClass( 'fa-pause-circle' );
+			slickSlider.slick( 'slickPause' );
+		}
+	} );
+
+	/**
+	 * YouTube play handler.
+	 *
+	 * @param {Object} iframe
+	 */
+	function playYouTube( iframe ) {
+		var player = tmcbbmYtPlayers[ iframe.id ];
+		player.playVideo();
+	}
+
+	/**
+	 * YouTube pause handler.
+	 *
+	 * @param {Object} iframe
+	 */
+	function pauseYouTube( iframe ) {
+		var player = tmcbbmYtPlayers[ iframe.id ];
+		player.pauseVideo();
+	}
+
+	/**
+	 * Vimeo play handler.
+	 *
+	 * @param {Object} iframe
+	 */
+	function playVimeo( iframe ) {
+		var player = new Vimeo.Player( iframe );
+		player.play().catch( function( error ) {
+			console.error( 'error playing the video:', error.name );
+		} );
+	}
+
+	/**
+	 * Vimeo pause handler.
+	 *
+	 * @param {Object} iframe
+	 */
+	function pauseVimeo( iframe ) {
+		var player = new Vimeo.Player( iframe );
+		player.pause().catch( function( error ) {
+			console.error( 'error playing the video:', error.name );
+		} );
+	}
+
+})( jQuery );
