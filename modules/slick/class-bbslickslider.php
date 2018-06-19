@@ -776,6 +776,30 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Conditional check to see if slides of the given type exist.
+	 *
+	 * @uses \BBSlickSlider::has_slides(), \BBSlickSlider::get_slide_types()
+	 *
+	 * @param string $type A supported slide type string.
+	 *
+	 * @return bool
+	 */
+	public function has_slides_of_type( $type ) {
+
+		if ( ! $this->has_slides() ) {
+			return false;
+		}
+
+		$slide_types = $this->get_slide_types();
+
+		if ( ! in_array( $type, $slide_types, true ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Get the slides from the module's settings.
 	 *
 	 * @uses \BBSlickSlider::has_slides()
