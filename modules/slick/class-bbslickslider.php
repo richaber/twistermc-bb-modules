@@ -602,6 +602,24 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Get the default query args for adding to our oEmbed call.
+	 *
+	 * @param string $url URL of the content to be embedded. The original embed URL that was entered by user.
+	 *
+	 * @return array
+	 */
+	public function get_embed_video_default_query_args( $url = '' ) {
+		if ( $this->is_vimeo_oembed_url( $url ) ) {
+			return $this->get_vimeo_default_query_args();
+		}
+		if ( $this->is_youtube_oembed_url( $url ) ) {
+			return $this->get_youtube_default_query_args();
+		}
+
+		return array();
+	}
+
+	/**
 	 * Get the default query args for adding to our YouTube oEmbed call.
 	 *
 	 * @return array
