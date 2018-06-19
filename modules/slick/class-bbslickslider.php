@@ -971,4 +971,13 @@ class BBSlickSlider extends FLBuilderModule {
 
 		return $merged;
 	}
+
+	/**
+	 * Print the Slick Slider settings object.
+	 *
+	 * @uses \BBSlickSlider::get_slick_settings()
+	 */
+	public function the_slick_settings_object() {
+		echo wp_json_encode( $this->get_slick_settings() );
+	}
 }
