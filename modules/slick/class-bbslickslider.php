@@ -662,4 +662,18 @@ class BBSlickSlider extends FLBuilderModule {
 
 		return false;
 	}
+
+	/**
+	 * Get the slides from the module's settings.
+	 *
+	 * @return stdClass[]|array An array of stdClass "slide" objects on success, else empty array.
+	 */
+	public function get_slides() {
+
+		if ( $this->has_slides() ) {
+			return $this->settings->slides;
+		}
+
+		return array();
+	}
 }
