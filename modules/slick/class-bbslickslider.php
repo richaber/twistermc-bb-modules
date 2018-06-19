@@ -65,10 +65,10 @@ class BBSlickSlider extends FLBuilderModule {
 
 		$this->add_css( 'font-awesome' );
 
-		$this->add_css( 'slick-style', 'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css' );
+		$this->add_css( 'slick-carousel', 'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css' );
 
 		$this->add_js(
-			'slick-script',
+			'slick-carousel',
 			'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js',
 			array(
 				'jquery',
@@ -76,7 +76,17 @@ class BBSlickSlider extends FLBuilderModule {
 		);
 
 		if ( $this->has_youtube_slides() ) {
-			$this->add_js( 'youtube-iframe-api', 'https://www.youtube.com/iframe_api' );
+
+			$this->add_js( 'youtube-player-api', 'https://www.youtube.com/player_api' );
+
+			$this->add_js(
+				'tmcbbm-yt-players',
+				$this->url . 'js/tmcbbm-yt-players.js',
+				array(
+					'jquery',
+					'youtube-player-api',
+				)
+			);
 		}
 
 		if ( $this->has_vimeo_slides() ) {
