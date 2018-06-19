@@ -883,4 +883,31 @@ class BBSlickSlider extends FLBuilderModule {
 
 		return '';
 	}
+
+	/**
+	 * Get an array of the default Slick slider settings.
+	 *
+	 * @return array
+	 */
+	public function get_slick_settings_defaults() {
+		return array(
+			'adaptiveHeight'   => 'false',
+			'arrows'           => 'true',
+			'autoplay'         => 'false',
+			'autoplaySpeed'    => 3000,
+			'centerMode'       => 'false',
+			'dots'             => 'false',
+			'fade'             => 'false',
+			'infinite'         => 'true',
+			'pauseOnDotsHover' => 'true',
+			'pauseOnFocus'     => 'true',
+			'pauseOnHover'     => 'true',
+			'slidesToShow'     => 1,
+			'slidesToScroll'   => 1,
+			'variableWidth'    => 'false',
+			'vertical'         => 'false',
+			'prevArrow'        => $this->get_slick_arrow( 'prevArrow', 'false' ),
+			'nextArrow'        => $this->get_slick_arrow( 'nextArrow', 'false' ),
+		);
+	}
 }
