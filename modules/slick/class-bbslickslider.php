@@ -870,6 +870,17 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Conditional check to see if Vimeo embed slides exist.
+	 *
+	 * @uses \BBSlickSlider::has_embed_provider_slides()
+	 *
+	 * @return bool
+	 */
+	public function has_vimeo_slides() {
+		return $this->has_embed_provider_slides( 'vimeo' );
+	}
+
+	/**
 	 * Get the slides from the module's settings.
 	 *
 	 * @uses \BBSlickSlider::has_slides()
