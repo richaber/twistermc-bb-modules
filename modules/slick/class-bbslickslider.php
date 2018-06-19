@@ -679,6 +679,17 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Check if the given URL is a YouTube oembed URL.
+	 *
+	 * @param string $url URL to check against.
+	 *
+	 * @return bool
+	 */
+	public function is_youtube_oembed_url( $url = '' ) {
+		return $this->is_oembed_provider_url( $url, 'youtube' );
+	}
+
+	/**
 	 * Conditional check to see if slides are set.
 	 *
 	 * @return bool
