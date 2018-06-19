@@ -581,4 +581,23 @@ class BBSlickSlider extends FLBuilderModule {
 	public function get_oembed_url_patterns() {
 		return $this->oembed_url_patterns;
 	}
+
+	/**
+	 * Get the oembed provider name from a given oembed URL.
+	 *
+	 * @param string $url URL of the content to be embedded.
+	 *
+	 * @return string
+	 */
+	public function get_oembed_provider( $url ) {
+
+		foreach ( $this->get_oembed_url_patterns() as $provider_name => $oembed_url_pattern ) {
+
+			if ( preg_match( $oembed_url_pattern, $url ) ) {
+				return $provider_name;
+			}
+		}
+
+		return '';
+	}
 }
