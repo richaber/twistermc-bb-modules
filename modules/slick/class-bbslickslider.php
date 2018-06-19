@@ -508,6 +508,85 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Merge user defined arguments into defaults array.
+	 *
+	 * NOTE: While *similar* to wp_parse_args, this is not the exact same thing.
+	 * This uses $defaults as both an allowed key whitelist, and default values.
+	 * This is done to prevent adding disallowed keys to the return merged array,
+	 * whereas wp_parse_args has no such restriction.
+	 *
+	 * @param array $args     Value to merge with $defaults.
+	 * @param array $defaults Optional. Array that serves as the defaults. Default empty.
+	 *
+	 * @return array Merged user defined values with defaults.
+	 */
+	public function parse_args( $args, $defaults ) {
+
+		return array_replace_recursive(
+			$defaults,
+			array_intersect_key(
+				$args,
+				$defaults
+			)
+		);
+	}
+
+	/**
+	 * Get the slides from the module's settings.
+	 *
+	 * @uses \BBSlickSlider::has_slides()
+	 *
+	 * @return \stdClass[]|array An array of stdClass "slide" objects on success, else empty array.
+	 */
+	public function get_slides() {
+
+		if ( $this->has_slides() ) {
+			return $this->settings->slides;
+		}
+
+		return array();
+	}
+
+	/**
+	 * Get the 'types' of slides that exist.
+	 *
+	 * Returns array of strings from 'slide_type_select'.
+	 * Currently 'image' or 'embed'.
+	 *
+	 * @uses \BBSlickSlider::get_slides()
+	 *
+	 * @return array
+	 */
+	public function get_slide_types() {
+
+		$slides = $this->get_slides();
+
+		if ( empty( $slides ) ) {
+			return array();
+		}
+
+		return wp_list_pluck( $slides, 'slide_type_select' );
+	}
+
+	/**
+	 * Get the URLs of embed slides.
+	 *
+	 * @uses \BBSlickSlider::has_embed_slides(), \BBSlickSlider::get_slides()
+	 *
+	 * @return array
+	 */
+	public function get_embed_slides_urls() {
+
+		if ( ! $this->has_embed_slides() ) {
+			return array();
+		}
+
+		$slides = $this->get_slides();
+
+		return wp_list_pluck( $slides, 'slide_embed' );
+	}
+
+	/**
 	 * Get the video ID from a YouTube or Vimeo video.
 	 *
 	 * @uses \BBSlickSlider::get_oembed_provider_name()
@@ -705,60 +784,128 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
-	 * Check if the given URL is from one of our supported oEmbed providers.
+	 * Get the default Slick Slider arrow markup strings.
 	 *
-	 * @uses \BBSlickSlider::get_oembed_url_pattern_by_provider_name()
+	 * @param string $vertical Whether to get the vertical or horizontal arrow strings. Valid values are 'false' or 'true' string.
 	 *
-	 * @param string $url      URL to check against.
-	 * @param string $provider Embed provider to check against.
-	 *
-	 * @return bool
+	 * @return array
 	 */
-	public function is_oembed_provider_url( $url, $provider = 'youtube' ) {
+	public function get_slick_arrows( $vertical = 'false' ) {
 
-		if ( empty( $url ) || empty( $provider ) ) {
-			return false;
+		$template = '<button class="%1$s" aria-hidden="true"><span class="tmc_isVisibilyHidden">%2$s</span></button>';
+
+		if ( empty( $vertical ) || 'false' === $vertical ) {
+			return array(
+				'nextArrow' => sprintf(
+					$template,
+					'fa fa-chevron-right slick-arrow slick-next',
+					esc_html__( 'Next', 'tmcbbm' )
+				),
+				'prevArrow' => sprintf(
+					$template,
+					'fa fa-chevron-left slick-arrow slick-prev',
+					esc_html__( 'Previous', 'tmcbbm' )
+				),
+			);
 		}
 
-		$pattern = $this->get_oembed_url_pattern_by_provider_name( $provider );
-
-		if ( empty( $pattern ) ) {
-			return false;
-		}
-
-		$is_match = preg_match( $pattern, $url );
-
-		if ( ! $is_match ) {
-			return false;
-		}
-
-		return true;
+		return array(
+			'nextArrow' => sprintf(
+				$template,
+				'fa fa-chevron-down slick-arrow slick-next',
+				esc_html__( 'Next', 'tmcbbm' )
+			),
+			'prevArrow' => sprintf(
+				$template,
+				'fa fa-chevron-up slick-arrow slick-prev',
+				esc_html__( 'Previous', 'tmcbbm' )
+			),
+		);
 	}
 
 	/**
-	 * Check if the given URL is a YouTube oembed URL.
+	 * Get a specific Slick Slider arrow markup string.
 	 *
-	 * @uses \BBSlickSlider::is_oembed_provider_url()
+	 * @uses \BBSlickSlider::get_slick_arrows()
 	 *
-	 * @param string $url URL to check against.
+	 * @param string $arrow The desired arrow setting. Valid values are 'nextArrow' or 'prevArrow'.
+	 * @param string $vertical Whether to get the vertical or horizontal arrow strings. Valid values are 'false' or 'true' string.
 	 *
-	 * @return bool
+	 * @return string
 	 */
-	public function is_youtube_oembed_url( $url = '' ) {
-		return $this->is_oembed_provider_url( $url, 'youtube' );
+	public function get_slick_arrow( $arrow = 'nextArrow', $vertical = 'false' ) {
+
+		$arrows = $this->get_slick_arrows( $vertical );
+
+		if ( ! empty( $arrows[ $arrow ] ) ) {
+			return $arrows[ $arrow ];
+		}
+
+		return '';
 	}
 
 	/**
-	 * Check if the given URL is a Vimeo oembed URL.
+	 * Get an array of the default Slick slider settings.
 	 *
-	 * @uses \BBSlickSlider::is_oembed_provider_url()
-	 *
-	 * @param string $url URL to check against.
-	 *
-	 * @return bool
+	 * @return array
 	 */
-	public function is_vimeo_oembed_url( $url = '' ) {
-		return $this->is_oembed_provider_url( $url, 'vimeo' );
+	public function get_slick_settings_defaults() {
+		return array(
+			'adaptiveHeight'   => 'false',
+			'arrows'           => 'true',
+			'autoplay'         => 'false',
+			'autoplaySpeed'    => 3000,
+			'centerMode'       => 'false',
+			'dots'             => 'false',
+			'fade'             => 'false',
+			'infinite'         => 'true',
+			'pauseOnDotsHover' => 'true',
+			'pauseOnFocus'     => 'true',
+			'pauseOnHover'     => 'true',
+			'slidesToShow'     => 1,
+			'slidesToScroll'   => 1,
+			'variableWidth'    => 'false',
+			'vertical'         => 'false',
+			'prevArrow'        => $this->get_slick_arrow( 'prevArrow', 'false' ),
+			'nextArrow'        => $this->get_slick_arrow( 'nextArrow', 'false' ),
+		);
+	}
+
+	/**
+	 * Get the Slick Slider settings array.
+	 *
+	 * @uses \BBSlickSlider::get_slick_settings_defaults(), \BBSlickSlider::parse_args()
+	 * @uses \BBSlickSlider::get_slick_arrow()
+	 *
+	 * @return array
+	 */
+	public function get_slick_settings() {
+
+		$settings = $this->settings;
+
+		if ( empty( $settings ) ) {
+			$settings = $this->get_slick_settings_defaults();
+		}
+
+		$merged = $this->parse_args( json_decode( wp_json_encode( $settings ), true ), $this->get_slick_settings_defaults() );
+
+		if ( ! empty( $merged['vertical'] ) && 'true' === $merged['vertical'] ) {
+			$merged['prevArrow'] = $this->get_slick_arrow( 'prevArrow', 'true' );
+			$merged['nextArrow'] = $this->get_slick_arrow( 'nextArrow', 'true' );
+		}
+
+		foreach ( $merged as $key => $value ) {
+
+			if ( is_numeric( $value ) ) {
+				$merged[ $key ] = (int) $value;
+			}
+
+			if ( 'true' === $value || 'false' === $value ) {
+				$merged[ $key ] = wp_validate_boolean( $value );
+			}
+		}
+
+		return $merged;
 	}
 
 	/**
@@ -881,58 +1028,60 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
-	 * Get the slides from the module's settings.
+	 * Check if the given URL is from one of our supported oEmbed providers.
 	 *
-	 * @uses \BBSlickSlider::has_slides()
+	 * @uses \BBSlickSlider::get_oembed_url_pattern_by_provider_name()
 	 *
-	 * @return \stdClass[]|array An array of stdClass "slide" objects on success, else empty array.
+	 * @param string $url      URL to check against.
+	 * @param string $provider Embed provider to check against.
+	 *
+	 * @return bool
 	 */
-	public function get_slides() {
+	public function is_oembed_provider_url( $url, $provider = 'youtube' ) {
 
-		if ( $this->has_slides() ) {
-			return $this->settings->slides;
+		if ( empty( $url ) || empty( $provider ) ) {
+			return false;
 		}
 
-		return array();
+		$pattern = $this->get_oembed_url_pattern_by_provider_name( $provider );
+
+		if ( empty( $pattern ) ) {
+			return false;
+		}
+
+		$is_match = preg_match( $pattern, $url );
+
+		if ( ! $is_match ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
-	 * Get the 'types' of slides that exist.
+	 * Check if the given URL is a YouTube oembed URL.
 	 *
-	 * Returns array of strings from 'slide_type_select'.
-	 * Currently 'image' or 'embed'.
+	 * @uses \BBSlickSlider::is_oembed_provider_url()
 	 *
-	 * @uses \BBSlickSlider::get_slides()
+	 * @param string $url URL to check against.
 	 *
-	 * @return array
+	 * @return bool
 	 */
-	public function get_slide_types() {
-
-		$slides = $this->get_slides();
-
-		if ( empty( $slides ) ) {
-			return array();
-		}
-
-		return wp_list_pluck( $slides, 'slide_type_select' );
+	public function is_youtube_oembed_url( $url = '' ) {
+		return $this->is_oembed_provider_url( $url, 'youtube' );
 	}
 
 	/**
-	 * Get the URLs of embed slides.
+	 * Check if the given URL is a Vimeo oembed URL.
 	 *
-	 * @uses \BBSlickSlider::has_embed_slides(), \BBSlickSlider::get_slides()
+	 * @uses \BBSlickSlider::is_oembed_provider_url()
 	 *
-	 * @return array
+	 * @param string $url URL to check against.
+	 *
+	 * @return bool
 	 */
-	public function get_embed_slides_urls() {
-
-		if ( ! $this->has_embed_slides() ) {
-			return array();
-		}
-
-		$slides = $this->get_slides();
-
-		return wp_list_pluck( $slides, 'slide_embed' );
+	public function is_vimeo_oembed_url( $url = '' ) {
+		return $this->is_oembed_provider_url( $url, 'vimeo' );
 	}
 
 	/**
@@ -1014,155 +1163,6 @@ class BBSlickSlider extends FLBuilderModule {
 	 */
 	public function is_vimeo_slide( $slide ) {
 		return $this->is_embed_provider_slide( $slide, 'vimeo' );
-	}
-
-	/**
-	 * Get the default Slick Slider arrow markup strings.
-	 *
-	 * @param string $vertical Whether to get the vertical or horizontal arrow strings. Valid values are 'false' or 'true' string.
-	 *
-	 * @return array
-	 */
-	public function get_slick_arrows( $vertical = 'false' ) {
-
-		$template = '<button class="%1$s" aria-hidden="true"><span class="tmc_isVisibilyHidden">%2$s</span></button>';
-
-		if ( empty( $vertical ) || 'false' === $vertical ) {
-			return array(
-				'nextArrow' => sprintf(
-					$template,
-					'fa fa-chevron-right slick-arrow slick-next',
-					esc_html__( 'Next', 'tmcbbm' )
-				),
-				'prevArrow' => sprintf(
-					$template,
-					'fa fa-chevron-left slick-arrow slick-prev',
-					esc_html__( 'Previous', 'tmcbbm' )
-				),
-			);
-		}
-
-		return array(
-			'nextArrow' => sprintf(
-				$template,
-				'fa fa-chevron-down slick-arrow slick-next',
-				esc_html__( 'Next', 'tmcbbm' )
-			),
-			'prevArrow' => sprintf(
-				$template,
-				'fa fa-chevron-up slick-arrow slick-prev',
-				esc_html__( 'Previous', 'tmcbbm' )
-			),
-		);
-	}
-
-	/**
-	 * Get a specific Slick Slider arrow markup string.
-	 *
-	 * @uses \BBSlickSlider::get_slick_arrows()
-	 *
-	 * @param string $arrow The desired arrow setting. Valid values are 'nextArrow' or 'prevArrow'.
-	 * @param string $vertical Whether to get the vertical or horizontal arrow strings. Valid values are 'false' or 'true' string.
-	 *
-	 * @return string
-	 */
-	public function get_slick_arrow( $arrow = 'nextArrow', $vertical = 'false' ) {
-
-		$arrows = $this->get_slick_arrows( $vertical );
-
-		if ( ! empty( $arrows[ $arrow ] ) ) {
-			return $arrows[ $arrow ];
-		}
-
-		return '';
-	}
-
-	/**
-	 * Get an array of the default Slick slider settings.
-	 *
-	 * @return array
-	 */
-	public function get_slick_settings_defaults() {
-		return array(
-			'adaptiveHeight'   => 'false',
-			'arrows'           => 'true',
-			'autoplay'         => 'false',
-			'autoplaySpeed'    => 3000,
-			'centerMode'       => 'false',
-			'dots'             => 'false',
-			'fade'             => 'false',
-			'infinite'         => 'true',
-			'pauseOnDotsHover' => 'true',
-			'pauseOnFocus'     => 'true',
-			'pauseOnHover'     => 'true',
-			'slidesToShow'     => 1,
-			'slidesToScroll'   => 1,
-			'variableWidth'    => 'false',
-			'vertical'         => 'false',
-			'prevArrow'        => $this->get_slick_arrow( 'prevArrow', 'false' ),
-			'nextArrow'        => $this->get_slick_arrow( 'nextArrow', 'false' ),
-		);
-	}
-
-	/**
-	 * Merge user defined arguments into defaults array.
-	 *
-	 * NOTE: While *similar* to wp_parse_args, this is not the exact same thing.
-	 * This uses $defaults as both an allowed key whitelist, and default values.
-	 * This is done to prevent adding disallowed keys to the return merged array,
-	 * whereas wp_parse_args has no such restriction.
-	 *
-	 * @param array $args     Value to merge with $defaults.
-	 * @param array $defaults Optional. Array that serves as the defaults. Default empty.
-	 *
-	 * @return array Merged user defined values with defaults.
-	 */
-	public function parse_args( $args, $defaults ) {
-
-		return array_replace_recursive(
-			$defaults,
-			array_intersect_key(
-				$args,
-				$defaults
-			)
-		);
-	}
-
-	/**
-	 * Get the Slick Slider settings array.
-	 *
-	 * @uses \BBSlickSlider::get_slick_settings_defaults(), \BBSlickSlider::parse_args()
-	 * @uses \BBSlickSlider::get_slick_arrow()
-	 *
-	 * @return array
-	 */
-	public function get_slick_settings() {
-
-		$settings = $this->settings;
-
-		if ( empty( $settings ) ) {
-			$settings = $this->get_slick_settings_defaults();
-		}
-
-		$merged = $this->parse_args( json_decode( wp_json_encode( $settings ), true ), $this->get_slick_settings_defaults() );
-
-		if ( ! empty( $merged['vertical'] ) && 'true' === $merged['vertical'] ) {
-			$merged['prevArrow'] = $this->get_slick_arrow( 'prevArrow', 'true' );
-			$merged['nextArrow'] = $this->get_slick_arrow( 'nextArrow', 'true' );
-		}
-
-		foreach ( $merged as $key => $value ) {
-
-			if ( is_numeric( $value ) ) {
-				$merged[ $key ] = (int) $value;
-			}
-
-			if ( 'true' === $value || 'false' === $value ) {
-				$merged[ $key ] = wp_validate_boolean( $value );
-			}
-		}
-
-		return $merged;
 	}
 
 	/**
