@@ -859,6 +859,24 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Get the URLs of embed slides.
+	 *
+	 * @uses \BBSlickSlider::has_embed_slides(), \BBSlickSlider::get_slides()
+	 *
+	 * @return array
+	 */
+	public function get_embed_slides_urls() {
+
+		if ( ! $this->has_embed_slides() ) {
+			return array();
+		}
+
+		$slides = $this->get_slides();
+
+		return wp_list_pluck( $slides, 'slide_embed' );
+	}
+
+	/**
 	 * Conditional check if the provided slide is an image slide.
 	 *
 	 * @param \stdClass $slide A stdClass "slide" object to test.
