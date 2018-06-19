@@ -676,4 +676,20 @@ class BBSlickSlider extends FLBuilderModule {
 
 		return array();
 	}
+
+	/**
+	 * Conditional check if the provided slide is an image slide.
+	 *
+	 * @param stdClass $slide A stdClass "slide" object to test.
+	 *
+	 * @return bool
+	 */
+	public function is_image_slide( $slide ) {
+
+		if ( empty( $slide ) || empty( $slide->slide_type_select ) || 'image' !== $slide->slide_type_select ) {
+			return false;
+		}
+
+		return true;
+	}
 }
