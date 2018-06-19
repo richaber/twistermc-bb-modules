@@ -504,4 +504,42 @@ class BBSlickSlider extends FLBuilderModule {
 			)
 		);
 	}
+
+	/**
+	 * Retrieve Video ID from supplied YouTube URL.
+	 *
+	 * Tested with the following YouTube Video URL formats:
+	 * https://youtu.be/dQw4w9WgXcQ
+	 * https://www.youtube.com/embed/dQw4w9WgXcQ
+	 * https://www.youtube.com/watch?v=dQw4w9WgXcC
+	 * https://www.youtube.com/?v=dQw4w9WgXcD
+	 * https://www.youtube.com/v/dQw4w9WgXcE
+	 * https://www.youtube.com/e/dQw4w9WgXcF
+	 * https://www.youtube.com/user/username#p/u/11/dQw4w9WgXcG
+	 * https://www.youtube.com/someyoutubepagename#p/c/54B8C800269D7C1B/0/dQw4w9WgXcH
+	 * https://www.youtube.com/watch?feature=player_embedded&v=dQw4w9WgXcI
+	 * https://www.youtube.com/?feature=player_embedded&v=dQw4w9WgXcJ
+	 *
+	 * @param string $url A YouTube Video URL in the supported format. Required.
+	 *
+	 * @return string|false The YouTube Video ID upon success. False on error.
+	 */
+	public function get_youtube_video_id( $url ) {
+
+		$yt_pattern = '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i';
+
+		/** Determine if this is actually a YouTube URL and look for the YouTube VIDEO_ID */
+		preg_match(
+			$yt_pattern,
+			$url,
+			$matches
+		);
+
+		if ( empty( $matches[1] ) ) {
+			return false;
+		}
+
+		return $matches[1];
+	}
+
 }
