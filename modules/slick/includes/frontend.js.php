@@ -31,8 +31,6 @@ if ( ! $module->has_slides() ) {
 	return;
 }
 
-// @codingStandardsIgnoreStart
-
 ?>
 
 (function( $ ) {
@@ -42,7 +40,7 @@ if ( ! $module->has_slides() ) {
 	 *
 	 * @type {string}
 	 */
-	var slickNode = '<?php echo esc_attr( $id ) ?>';
+	var slickNode = '<?php echo esc_attr( $id ); ?>';
 
 	/**
 	 * Whether this module is configured to autoplay videos.

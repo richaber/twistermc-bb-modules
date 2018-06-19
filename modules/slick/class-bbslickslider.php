@@ -151,8 +151,8 @@ class BBSlickSlider extends FLBuilderModule {
 	 * @action init
 	 */
 	public static function register() {
-		BBSlickSlider::register_settings_form();
-		BBSlickSlider::register_module();
+		self::register_settings_form();
+		self::register_module();
 	}
 
 	/**
@@ -660,6 +660,8 @@ class BBSlickSlider extends FLBuilderModule {
 		}
 
 		/**
+		 * The YouTube or Vimeo video ID.
+		 *
 		 * @var string $video_id
 		 */
 		$video_id = $this->get_embed_video_id( $url );

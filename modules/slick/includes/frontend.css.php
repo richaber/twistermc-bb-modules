@@ -30,8 +30,6 @@ if ( ! $module->has_slides() ) {
 	return;
 }
 
-// @codingStandardsIgnoreStart
-
 ?>
 
 .fl-node-<?php echo esc_attr( $id ); ?> .slick-arrow,
