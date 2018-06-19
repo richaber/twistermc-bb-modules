@@ -648,4 +648,18 @@ class BBSlickSlider extends FLBuilderModule {
 		// Array dereferencing syntax requires PHP 5.4+.
 		return $this->get_oembed_url_patterns()[ $provider ];
 	}
+
+	/**
+	 * Conditional check to see if slides are set.
+	 *
+	 * @return bool
+	 */
+	public function has_slides() {
+
+		if ( ! empty( $this->settings->slides ) ) {
+			return true;
+		}
+
+		return false;
+	}
 }
