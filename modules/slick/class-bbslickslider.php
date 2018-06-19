@@ -29,9 +29,9 @@ class BBSlickSlider extends FLBuilderModule {
 	 *
 	 * @see wp_video_shortcode()
 	 *
-	 * @var array $url_regex_patterns Regex patterns for URL matching.
+	 * @var array $oembed_url_patterns Regex patterns for URL matching.
 	 */
-	protected $url_regex_patterns = array(
+	protected $oembed_url_patterns = array(
 		'youtube' => '#^https?://(?:www\.)?(?:youtube\.com/watch|youtu\.be/)#',
 		'vimeo'   => '#^https?://(.+\.)?vimeo\.com/.*#',
 	);
@@ -571,5 +571,14 @@ class BBSlickSlider extends FLBuilderModule {
 		}
 
 		return $matches[1];
+	}
+
+	/**
+	 * Get the supported oembed URL regex patterns.
+	 *
+	 * @return array
+	 */
+	public function get_oembed_url_patterns() {
+		return $this->oembed_url_patterns;
 	}
 }
