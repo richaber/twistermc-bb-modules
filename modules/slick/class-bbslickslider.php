@@ -692,4 +692,20 @@ class BBSlickSlider extends FLBuilderModule {
 
 		return true;
 	}
+
+	/**
+	 * Conditional check if the provided slide is an ebmedded video slide.
+	 *
+	 * @param stdClass $slide A stdClass "slide" object to test.
+	 *
+	 * @return bool
+	 */
+	public function is_embed_slide( $slide ) {
+
+		if ( empty( $slide ) || empty( $slide->slide_type_select ) || 'embed' !== $slide->slide_type_select ) {
+			return false;
+		}
+
+		return true;
+	}
 }
