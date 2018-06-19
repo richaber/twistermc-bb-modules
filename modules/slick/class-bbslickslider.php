@@ -690,6 +690,17 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Check if the given URL is a Vimeo oembed URL.
+	 *
+	 * @param string $url URL to check against.
+	 *
+	 * @return bool
+	 */
+	public function is_vimeo_oembed_url( $url = '' ) {
+		return $this->is_oembed_provider_url( $url, 'vimeo' );
+	}
+
+	/**
 	 * Conditional check to see if slides are set.
 	 *
 	 * @return bool
