@@ -615,4 +615,20 @@ class BBSlickSlider extends FLBuilderModule {
 			'enablejsapi' => 1,
 		);
 	}
+
+	/**
+	 * Get the default query args for adding to our Vimeo oEmbed call.
+	 *
+	 * @return array
+	 */
+	public function get_vimeo_default_query_args() {
+		return array(
+			'title'       => 0,
+			'byline'      => 0,
+			'portrait'    => 0,
+			'badge'       => 0,
+			'loop'        => 1,
+			'transparent' => 0,
+		);
+	}
 }
