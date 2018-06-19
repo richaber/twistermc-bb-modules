@@ -845,6 +845,29 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Conditional check to see if the given slide is an oembed slide for the given provider.
+	 *
+	 * @uses \BBSlickSlider::is_embed_slide(), \BBSlickSlider::is_oembed_provider_url()
+	 *
+	 * @param stdClass $slide    A stdClass "slide" object to test.
+	 * @param string   $provider A supported video embed provider.
+	 *
+	 * @return bool
+	 */
+	public function is_embed_provider_slide( $slide, $provider = 'youtube' ) {
+
+		if ( empty( $slide ) || empty( $provider ) ) {
+			return false;
+		}
+
+		if ( empty( $slide->slide_embed ) || ! $this->is_embed_slide( $slide ) ) {
+			return false;
+		}
+
+		return $this->is_oembed_provider_url( $slide->slide_embed, $provider );
+	}
+
+	/**
 	 * Get the default Slick Slider arrow markup strings.
 	 *
 	 * @param string $vertical Whether to get the vertical or horizontal arrow strings. Valid values are 'false' or 'true' string.
