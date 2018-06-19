@@ -859,6 +859,17 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Conditional check to see if YouTube embed slides exist.
+	 *
+	 * @uses \BBSlickSlider::has_embed_provider_slides()
+	 *
+	 * @return bool
+	 */
+	public function has_youtube_slides() {
+		return $this->has_embed_provider_slides( 'youtube' );
+	}
+
+	/**
 	 * Get the slides from the module's settings.
 	 *
 	 * @uses \BBSlickSlider::has_slides()
