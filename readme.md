@@ -7,14 +7,14 @@ This is a free plugin for Beaver Builder that I'll be adding my custom modules t
 My first module is a Slick slider module. The carousels that come with Beaver Builder are OK, but they leave a lot to be desired. That's why I'm integrating Slick.
 
 ## TODO
-- [] Update Vimeo helper script to be enqueued only if needed. / Half done, only shows with video sliders now.
+- [x] Update Vimeo helper script to be enqueued only if needed. / Half done, only shows with video sliders now.
 - [x] Break out Photo vs Video settings so we can properly hide/show settings
 - [ ] Add a field to put text on videos
 - [ ] Double check the slick scripts so we can avoid setting conflicts between video and photo slideshows.
-- [ ] Make it possible to have videos AND photos in one slideshow.
+- [x] Make it possible to have videos AND photos in one slideshow.
 - [ ] Maybe add a WYSIWYG field for creating content on slides.
-- [ ] Either use the internal or external Vimeo helper script and remove the other one.
-- [ ] Have Rich review everything always because he's wicked smart.
+- [x] Either use the internal or external Vimeo helper script and remove the other one.
+- [ ] Have Rich review everything always because he's wicked smart. <-- this is debatable
 
 ## Release Notes
 
