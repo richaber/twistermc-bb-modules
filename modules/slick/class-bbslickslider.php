@@ -569,6 +569,34 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Get the type of a single slide.
+	 *
+	 * Returns the slide type, 'image', 'youtube', or 'vimeo'.
+	 *
+	 * @uses \BBSlickSlider::is_image_slide(), \BBSlickSlider::is_youtube_slide(), \BBSlickSlider::is_vimeo_slide()
+	 *
+	 * @param stdClass $slide A stdClass "slide" object to test.
+	 *
+	 * @return string
+	 */
+	public function get_slide_type( $slide ) {
+
+		if ( $this->is_image_slide( $slide ) ) {
+			return 'image';
+		}
+
+		if ( $this->is_youtube_slide( $slide ) ) {
+			return 'youtube';
+		}
+
+		if ( $this->is_vimeo_slide( $slide ) ) {
+			return 'vimeo';
+		}
+
+		return '';
+	}
+
+	/**
 	 * Get the URLs of embed slides.
 	 *
 	 * @uses \BBSlickSlider::has_embed_slides(), \BBSlickSlider::get_slides()
