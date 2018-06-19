@@ -1157,6 +1157,66 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Get an array of the slide data for use with JS.
+	 *
+	 * @uses \BBSlickSlider::get_slides(), \BBSlickSlider::get_slide_type(), \BBSlickSlider::get_slide_id()
+	 *
+	 * @return array
+	 */
+	public function get_slick_slides_object() {
+
+		$slides = $this->get_slides();
+
+		$return = array();
+
+		foreach ( $slides as $index => $slide ) {
+			$return[ $index ] = array(
+				'index' => $index,
+				'label' => $slide->slide_label,
+				'src'   => 'embed' === $slide->slide_type_select ? $slide->slide_embed : $slide->slide_image_src,
+				'type'  => $this->get_slide_type( $slide ),
+				'id'    => $this->get_slide_id( $slide ),
+			);
+		}
+
+		return json_decode( wp_json_encode( $return ), true );
+	}
+
+	/**
+	 * Get the slide ID.
+	 *
+	 * For an image slide, returns the Image Attachment ID. For a YouTube or Vimeo slide, returns the Video ID.
+	 *
+	 * @param \stdClass $slide A stdClass object representing a slide, as defined in the tmcbb_slickslider_slide form.
+	 *
+	 * @return false|null|string
+	 */
+	public function get_slide_id( $slide ) {
+
+		$id = null;
+
+		$slide_type = $this->get_slide_type( $slide );
+
+		if ( empty( $slide_type ) ) {
+			return $id;
+		}
+
+		switch ( $slide_type ) {
+			case 'youtube':
+				$id = $this->get_youtube_video_id( $slide->slide_embed );
+				break;
+			case 'vimeo':
+				$id = $this->get_vimeo_video_id( $slide->slide_embed );
+				break;
+			case 'image':
+				$id = $slide->slide_image;
+				break;
+		}
+
+		return $id;
+	}
+
+	/**
 	 * Conditional check to see if slides are set.
 	 *
 	 * @return bool
@@ -1434,6 +1494,13 @@ class BBSlickSlider extends FLBuilderModule {
 	 */
 	public function the_slick_settings_object() {
 		echo wp_json_encode( $this->get_slick_settings() );
+	}
+
+	/**
+	 * Print a JSON object representing the slide data for use with JS.
+	 */
+	public function the_slick_slides_object() {
+		echo wp_json_encode( $this->get_slick_slides_object() );
 	}
 
 	/**
