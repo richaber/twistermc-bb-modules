@@ -650,6 +650,35 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Check if the given URL is from one of our supported oEmbed providers.
+	 *
+	 * @param string $url      URL to check against.
+	 * @param string $provider Embed provider to check against.
+	 *
+	 * @return bool
+	 */
+	public function is_oembed_provider_url( $url, $provider = 'youtube' ) {
+
+		if ( empty( $url ) || empty( $provider ) ) {
+			return false;
+		}
+
+		$pattern = $this->get_oembed_url_pattern_by_provider_name( $provider );
+
+		if ( empty( $pattern ) ) {
+			return false;
+		}
+
+		$is_match = preg_match( $pattern, $url );
+
+		if ( ! $is_match ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Conditional check to see if slides are set.
 	 *
 	 * @return bool
