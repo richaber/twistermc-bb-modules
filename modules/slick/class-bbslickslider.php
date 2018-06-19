@@ -862,4 +862,25 @@ class BBSlickSlider extends FLBuilderModule {
 			),
 		);
 	}
+
+	/**
+	 * Get a specific Slick Slider arrow markup string.
+	 *
+	 * @uses \BBSlickSlider::get_slick_arrows()
+	 *
+	 * @param string $arrow The desired arrow setting. Valid values are 'nextArrow' or 'prevArrow'.
+	 * @param string $vertical Whether to get the vertical or horizontal arrow strings. Valid values are 'false' or 'true' string.
+	 *
+	 * @return string
+	 */
+	public function get_slick_arrow( $arrow = 'nextArrow', $vertical = 'false' ) {
+
+		$arrows = $this->get_slick_arrows( $vertical );
+
+		if ( ! empty( $arrows[ $arrow ] ) ) {
+			return $arrows[ $arrow ];
+		}
+
+		return '';
+	}
 }
