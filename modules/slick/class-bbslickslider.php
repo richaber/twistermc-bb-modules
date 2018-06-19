@@ -800,6 +800,17 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Conditional check to see if image slides exist.
+	 *
+	 * @uses \BBSlickSlider::has_slides_of_type()
+	 *
+	 * @return bool
+	 */
+	public function has_image_slides() {
+		return $this->has_slides_of_type( 'image' );
+	}
+
+	/**
 	 * Get the slides from the module's settings.
 	 *
 	 * @uses \BBSlickSlider::has_slides()
