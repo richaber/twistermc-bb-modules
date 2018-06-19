@@ -1,4 +1,94 @@
 /**
- * This file should contain frontend styles that 
- * will be applied to all module instances.
+ * This file should contain frontend styles that will be applied to ALL module instances.
  */
+
+.tmc_isVisibilyHidden {
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+	position: absolute;
+	clip: rect(0 0 0 0);
+	overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------
+Slick
+------------------------------------------------------------------------ */
+
+.slickModule_bb {
+	position: relative;
+}
+
+.slickModule_bb button,
+.slickModule_bb button:hover,
+.slickModule_bb button:active,
+.slick-active button,
+.slick-active button:focus,
+.slick-active button:active {
+	border: none;
+}
+
+/* ---------------------------------------------------------------------
+Dots
+------------------------------------------------------------------------ */
+.slickModule_bb .slick-dots {
+	text-align: center;
+}
+
+.slickModule_bb .slick-dots li {
+	display: inline-block;
+	padding: 5px 5px;
+}
+
+/* ---------------------------------------------------------------------
+Play/Pause
+------------------------------------------------------------------------ */
+
+.slickModule_bb_Pause,
+.slickModule_bb_Pause:active,
+.slickModule_bb_Pause:focus {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 10;
+}
+
+/* ---------------------------------------------------------------------
+Arrows
+------------------------------------------------------------------------ */
+
+.slickModule_bb .slick-arrow,
+.slickModule_bb .slick-arrow:active,
+.slickModule_bb .slick-arrow:focus {
+	position: absolute;
+	top: 40%;
+	z-index: 10;
+}
+
+.slickModule_bb .slick-arrow.slick-prev {
+	left: 10px;
+}
+
+.slickModule_bb .slick-arrow.slick-next {
+	right: 10px;
+}
+
+/* ---------------------------------------------------------------------
+Embeds
+------------------------------------------------------------------------ */
+.slickWrapper_bb li .videoWrapper {
+	position: relative;
+	padding-bottom: 56.25%;
+	height: 0;
+	overflow: hidden;
+	max-width: 100%;
+}
+.slickWrapper_bb li .videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
