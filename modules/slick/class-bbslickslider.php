@@ -631,4 +631,21 @@ class BBSlickSlider extends FLBuilderModule {
 			'transparent' => 0,
 		);
 	}
+
+	/**
+	 * Get the oembed regex pattern for matching against a URL.
+	 *
+	 * @param string $provider The provider namme.
+	 *
+	 * @return string
+	 */
+	public function get_oembed_url_pattern_by_provider_name( $provider ) {
+
+		if ( ! array_key_exists( $provider, $this->get_oembed_url_patterns() ) ) {
+			return '';
+		}
+
+		// Array dereferencing syntax requires PHP 5.4+.
+		return $this->get_oembed_url_patterns()[ $provider ];
+	}
 }
