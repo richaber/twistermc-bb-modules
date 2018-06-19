@@ -868,7 +868,7 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
-	 * Conditional check if the provided slide is an ebmedded YouTube slide.
+	 * Conditional check if the provided slide is a YouTube oembed slide.
 	 *
 	 * @uses \BBSlickSlider::is_embed_provider_slide()
 	 *
@@ -878,6 +878,19 @@ class BBSlickSlider extends FLBuilderModule {
 	 */
 	public function is_youtube_slide( $slide ) {
 		return $this->is_embed_provider_slide( $slide, 'youtube' );
+	}
+
+	/**
+	 * Conditional check if the provided slide is a Vimeo oembed slide.
+	 *
+	 * @uses \BBSlickSlider::is_embed_provider_slide()
+	 *
+	 * @param stdClass $slide A stdClass "slide" object to test.
+	 *
+	 * @return bool
+	 */
+	public function is_vimeo_slide( $slide ) {
+		return $this->is_embed_provider_slide( $slide, 'vimeo' );
 	}
 
 	/**
