@@ -1,12 +1,19 @@
 <?php
 /**
- * This file should be used to render each module instance.
- * You have access to two variables in this file: 
- * 
- * $module An instance of your module class.
- * $settings The module's settings.
+ * BBSlickSlider "frontend HTML" file.
  *
- * Example: 
+ * Used by Beaver Builder to generate the markup output.
+ *
+ * @see     \BBSlickSlider
+ * @see     \FLBuilderModule
+ *
+ * @link    https://kb.wpbeaverbuilder.com/article/600-cmdg-05-module-html
+ *
+ * @var \BBSlickSlider $module   An instance of the module class.
+ * @var string         $id       The module's node ID ( i.e. $module->node ).
+ * @var stdClass       $settings The module's settings ( i.e. $module->settings ).
+ *
+ * @package TwisterMcBBModules
  */
 
 // Exit if accessed directly.
@@ -14,38 +21,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * If we don't have any slides, we won't output any of the inner content.
+ * However, we will output the wrapping div, just so we have some kind of markup in the Page Builder for targeting.
+ */
+
 ?>
 
 <div class="slickModule_bb">
-	<div class="slickWrapper_bb">
-		<?php
 
-		if ( $settings->photoVideo === 'photo' ) {
-			$arr = $settings->multiple_photos_field;
-			foreach ( $arr as &$value ) {
-				echo '<li>';
-				echo wp_get_attachment_image( $value, 'large', '', array( 'class' => 'img-responsive' ) );
+	<?php if ( $module->has_slides() ) : ?>
 
-				if ( $settings->showCaptions === 'true' ) {
-					$imageInfo = get_post( $value );
-					echo '<div class="slickPhotoCaption">' . $imageInfo->post_excerpt . '</div>';
-				}
+		<div class="slickWrapper_bb">
 
-				echo '</li>';
-			}
-		} else {
-			$arr = $settings->multiple_video_field;
-			foreach ( $arr as &$value ) {
-				echo '<li>';
-				echo '<div class="videoWrapper">';
-				$embed_code = wp_oembed_get( $value );
-				echo $embed_code;
-				echo '</div>';
-				echo '</li>';
-			}
-		}
-		?>
-	</div>
-	<button class="fa fa-pause-circle js-slickModule_bb_Pause slickModule_bb_Pause" aria-hidden="true"><span class="tmc_isVisibilyHidden">Pause</span></button>
+			<?php foreach ( $module->get_slides() as $index => $slide ) : ?>
+
+				<?php $module->the_slide( $slide, $index ); ?>
+
+			<?php endforeach; ?>
+
+		</div>
+
+		<button class="fa fa-pause-circle js-slickModule_bb_Pause slickModule_bb_Pause" aria-hidden="true">
+			<span class="screen-reader-text">
+				<?php esc_html_e( 'Pause', 'tmcbbm' ); ?>
+			</span>
+		</button>
+
+	<?php endif; ?>
+
 </div>
-
