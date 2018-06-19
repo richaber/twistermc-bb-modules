@@ -822,4 +822,44 @@ class BBSlickSlider extends FLBuilderModule {
 
 		return true;
 	}
+
+	/**
+	 * Get the default Slick Slider arrow markup strings.
+	 *
+	 * @param string $vertical Whether to get the vertical or horizontal arrow strings. Valid values are 'false' or 'true' string.
+	 *
+	 * @return array
+	 */
+	public function get_slick_arrows( $vertical = 'false' ) {
+
+		$template = '<button class="%1$s" aria-hidden="true"><span class="tmc_isVisibilyHidden">%2$s</span></button>';
+
+		if ( empty( $vertical ) || 'false' === $vertical ) {
+			return array(
+				'nextArrow' => sprintf(
+					$template,
+					'fa fa-chevron-right slick-arrow slick-next',
+					esc_html__( 'Next', 'tmcbbm' )
+				),
+				'prevArrow' => sprintf(
+					$template,
+					'fa fa-chevron-left slick-arrow slick-prev',
+					esc_html__( 'Previous', 'tmcbbm' )
+				),
+			);
+		}
+
+		return array(
+			'nextArrow' => sprintf(
+				$template,
+				'fa fa-chevron-down slick-arrow slick-next',
+				esc_html__( 'Next', 'tmcbbm' )
+			),
+			'prevArrow' => sprintf(
+				$template,
+				'fa fa-chevron-up slick-arrow slick-prev',
+				esc_html__( 'Previous', 'tmcbbm' )
+			),
+		);
+	}
 }
