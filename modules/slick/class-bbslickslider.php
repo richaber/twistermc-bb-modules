@@ -910,4 +910,28 @@ class BBSlickSlider extends FLBuilderModule {
 			'nextArrow'        => $this->get_slick_arrow( 'nextArrow', 'false' ),
 		);
 	}
+
+	/**
+	 * Merge user defined arguments into defaults array.
+	 *
+	 * NOTE: While *similar* to wp_parse_args, this is not the exact same thing.
+	 * This uses $defaults as both an allowed key whitelist, and default values.
+	 * This is done to prevent adding disallowed keys to the return merged array,
+	 * whereas wp_parse_args has no such restriction.
+	 *
+	 * @param array $args     Value to merge with $defaults.
+	 * @param array $defaults Optional. Array that serves as the defaults. Default empty.
+	 *
+	 * @return array Merged user defined values with defaults.
+	 */
+	public function parse_args( $args, $defaults ) {
+
+		return array_replace_recursive(
+			$defaults,
+			array_intersect_key(
+				$args,
+				$defaults
+			)
+		);
+	}
 }
