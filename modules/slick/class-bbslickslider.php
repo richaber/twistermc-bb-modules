@@ -72,6 +72,51 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Modify settings data before it is saved.
+	 *
+	 * Situations can arise where settings data is polluted,
+	 * due to the way that Beaver Builder's "select toggle" functionality works.
+	 * For example, if we have a select toggle that shows/hides some fields,
+	 * it is possible that the values of fields being hidden are not in their default state,
+	 * and can pollute what we're expecting.
+	 * Case in point, the 'oneSlide' setting.
+	 * Some fields should have their default values if oneSlide is set to true.
+	 *
+	 * @uses \BBSlickSlider::get_slick_settings_defaults()
+	 *
+	 * @param \stdClass $settings A settings object that is going to be saved.
+	 *
+	 * @return \stdClass
+	 */
+	public function update( $settings ) {
+
+		// @codingStandardsIgnoreStart
+
+		$defaults = $this->get_slick_settings_defaults();
+
+		/**
+		 * If we're showing "one slide" at a time, reset the "multiple slide" values back to defaults.
+		 */
+		switch ( $settings->oneSlide ) {
+			case 'true':
+				$settings->centerMode     = $defaults['centerMode'];
+				$settings->slidesToShow   = $defaults['slidesToShow'];
+				$settings->slidesToScroll = $defaults['slidesToScroll'];
+				break;
+		}
+
+		switch ( $settings->adaptiveHeight ) {
+			case 'true':
+				$settings->fixedHeightSize = 0;
+				break;
+		}
+
+		// @codingStandardsIgnoreEnd
+
+		return $settings;
+	}
+
+	/**
 	 * Register the module and its form settings.
 	 *
 	 * This is just a convenience wrapper so we only have to call BBSlickSlider::register.
@@ -1219,6 +1264,9 @@ class BBSlickSlider extends FLBuilderModule {
 	/**
 	 * Render a slide's markup.
 	 *
+	 * @uses \BBSlickSlider::get_slide_type(), \BBSlickSlider::the_youtube_slide()
+	 * @uses \BBSlickSlider::the_vimeo_slide(), \BBSlickSlider::the_image_slide()
+	 *
 	 * @param \stdClass $slide A stdClass object representing a slide, as defined in the tmcbb_slickslider_slide form.
 	 * @param int       $index Numeric key/index of the slide in the slides array.
 	 */
@@ -1241,6 +1289,8 @@ class BBSlickSlider extends FLBuilderModule {
 
 	/**
 	 * Render an image slide.
+	 *
+	 * @uses \BBSlickSlider::get_slide_type()
 	 *
 	 * @param \stdClass $slide A stdClass object representing a slide, as defined in the tmcbb_slickslider_slide form.
 	 * @param int       $index Numeric key/index of the slide in the slides array.
@@ -1276,6 +1326,8 @@ class BBSlickSlider extends FLBuilderModule {
 	/**
 	 * Render a YouTube slide.
 	 *
+	 * @uses \BBSlickSlider::get_slide_type(), \BBSlickSlider::get_youtube_video_id()
+	 *
 	 * @param \stdClass $slide A stdClass object representing a slide, as defined in the tmcbb_slickslider_slide form.
 	 * @param int       $index Numeric key/index of the slide in the slides array.
 	 */
@@ -1299,6 +1351,8 @@ class BBSlickSlider extends FLBuilderModule {
 
 	/**
 	 * Render a Vimeo slide.
+	 *
+	 * @uses \BBSlickSlider::get_slide_type(), \BBSlickSlider::get_vimeo_video_id()
 	 *
 	 * @param \stdClass $slide A stdClass object representing a slide, as defined in the tmcbb_slickslider_slide form.
 	 * @param int       $index Numeric key/index of the slide in the slides array.
