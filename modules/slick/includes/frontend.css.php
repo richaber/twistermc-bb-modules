@@ -1,15 +1,16 @@
 <?php
 /**
- * This file should contain frontend styles that
- * will be applied to individual module instances.
+ * BBSlickSlider "frontend CSS" file.
  *
- * You have access to three variables in this file:
+ * Used by Beaver Builder to generate frontend styles that will be applied to individual module instances.
  *
- * $module An instance of your module class.
- * $id The module's ID.
- * $settings The module's settings.
+ * @see     \BBSlickSlider
  *
- * Example:
+ * @var \BBSlickSlider $module   An instance of the module class.
+ * @var string         $id       The module's node ID ( i.e. $module->node ).
+ * @var stdClass       $settings The module's settings ( i.e. $module->settings ).
+ *
+ * @package TwisterMcBBModules
  */
 
 // Exit if accessed directly.
@@ -17,164 +18,127 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * If we don't have any slides,
+ * echo an empty string (BB expects some kind of output for building caches and such),
+ * and return.
+ */
+if ( ! $module->has_slides() ) {
+
+	echo '';
+
+	return;
+}
+
+// @codingStandardsIgnoreStart
+
 ?>
 
-.tmc_isVisibilyHidden {
-	width: 1px;
-	height: 1px;
-	margin: -1px;
-	padding: 0;
-	border: 0;
-	position: absolute;
-	clip: rect(0 0 0 0);
-	overflow: hidden;
+.fl-node-<?php echo esc_attr( $id ); ?> .slick-arrow,
+.fl-node-<?php echo esc_attr( $id ); ?> .slickModule_bb_Pause {
+	<?php if ( ! empty( $settings->arrowBackgroundColor ) ) : ?>
+	background: <?php echo esc_attr( '#' . $settings->arrowBackgroundColor ); ?>;
+	<?php else : ?>
+	background: transparent;
+	<?php endif; ?>
+	<?php if ( ! empty( $settings->arrowColor ) ) : ?>
+	color: <?php echo esc_attr( '#' . $settings->arrowColor ); ?>;
+	<?php endif; ?>
 }
 
-/* ---------------------------------------------------------------------
-Slick
------------------------------------------------------------------------- */
-
-.slickModule_bb {
-	position: relative;
+.fl-node-<?php echo esc_attr( $id ); ?> .slick-arrow:before,
+.fl-node-<?php echo esc_attr( $id ); ?> .slickModule_bb_Pause:before {
+	<?php if ( ! empty( $settings->arrowSize ) ) : ?>
+	font-size: <?php echo esc_attr( $settings->arrowSize ); ?>px;
+	<?php endif; ?>
 }
 
-.slickModule_bb button,
-.slickModule_bb button:hover,
-.slickModule_bb button:active,
-.slick-active button,
-.slick-active button:focus,
-.slick-active button:active {
-	border: none;
+.fl-node-<?php echo esc_attr( $id ); ?> .slick-arrow:hover,
+.fl-node-<?php echo esc_attr( $id ); ?> .slickModule_bb_Pause:hover {
+	<?php if ( ! empty( $settings->arrowHoverBackgroundColor ) ) : ?>
+	background: <?php echo esc_attr( '#' . $settings->arrowHoverBackgroundColor ); ?>;
+	<?php else : ?>
+	background: transparent;
+	<?php endif; ?>
+	<?php if ( ! empty( $settings->arrowHoverColor ) ) : ?>
+	color: <?php echo esc_attr( '#' . $settings->arrowHoverColor ); ?>;
+	<?php endif; ?>
 }
 
-.fl-node-<?php echo $id; ?> .slick-arrow,
-.fl-node-<?php echo $id; ?> .slickModule_bb_Pause {
-	<?php if ($settings->arrowBackgroundColor != '') {  ?>background: #<?php echo $settings->arrowBackgroundColor; ?>;<?php } else { ?> background: transparent; <?php } ?>
-	color: #<?php echo $settings->arrowColor; ?>;
+.fl-node-<?php echo esc_attr( $id ); ?> .slick-dots button {
+	<?php if ( ! empty( $settings->dotBackgroundColor ) ) : ?>
+	background: <?php echo esc_attr( '#' . $settings->dotBackgroundColor ); ?>;
+	<?php else : ?>
+	background: transparent;
+	<?php endif; ?>
+	<?php if ( ! empty( $settings->dotColor ) ) : ?>
+	color: <?php echo esc_attr( '#' . $settings->dotColor ); ?>;
+	<?php endif; ?>
+	<?php if ( ! empty( $settings->dotSize ) ) : ?>
+	font-size: <?php echo esc_attr( $settings->dotSize ); ?>px;
+	<?php endif; ?>
 }
 
-.fl-node-<?php echo $id; ?> .slick-arrow:before,
-.fl-node-<?php echo $id; ?> .slickModule_bb_Pause:before {
-	font-size: <?php echo $settings->arrowSize; ?>px;
+.fl-node-<?php echo esc_attr( $id ); ?> .slick-dots button:hover {
+	<?php if ( ! empty( $settings->dotHoverBackgroundColor ) ) : ?>
+	background: <?php echo esc_attr( '#' . $settings->dotHoverBackgroundColor ); ?>;
+	<?php else : ?>
+	background: transparent;
+	<?php endif; ?>
+	<?php if ( ! empty( $settings->dotHoverColor ) ) : ?>
+	color: <?php echo esc_attr( '#' . $settings->dotHoverColor ); ?>;
+	<?php endif; ?>
 }
 
-.fl-node-<?php echo $id; ?> .slick-arrow:hover,
-.fl-node-<?php echo $id; ?> .slickModule_bb_Pause:hover {
-	<?php if ($settings->arrowHoverBackgroundColor != '') {  ?>background: #<?php echo $settings->arrowHoverBackgroundColor; ?>;<?php } else { ?> background: transparent; <?php } ?>
-	color: #<?php echo $settings->arrowHoverColor; ?>;
+.fl-node-<?php echo esc_attr( $id ); ?> .slick-active button {
+	<?php if ( ! empty( $settings->dotActiveBackgroundColor ) ) : ?>
+	background: <?php echo esc_attr( '#' . $settings->dotActiveBackgroundColor ); ?>;
+	<?php else : ?>
+	background: transparent;
+	<?php endif; ?>
+	<?php if ( ! empty( $settings->dotActiveColor ) ) : ?>
+	color: <?php echo esc_attr( '#' . $settings->dotActiveColor ); ?>;
+	<?php endif; ?>
 }
 
-/* ---------------------------------------------------------------------
-Dots
------------------------------------------------------------------------- */
-.slickModule_bb .slick-dots {
-	text-align: center;
-}
 
-.slickModule_bb .slick-dots li {
-	display: inline-block;
-	padding: 5px 5px;
-}
+<?php if ( 'true' === $settings->forceImageSize && 'false' === $settings->oneSlide ) : ?>
+	/* ---------------------------------------------------------------------
+	Force Image Size
+	------------------------------------------------------------------------ */
+	.fl-node-<?php echo esc_attr( $id ); ?> .slick-slide img {
+		width: 100%;
+		height: auto;
+	}
+<?php endif; ?>
 
-.fl-node-<?php echo $id; ?> .slick-dots button {
-	<?php if ($settings->dotBackgroundColor != '') {  ?>background: #<?php echo $settings->dotBackgroundColor; ?>;<?php } else { ?> background: transparent; <?php } ?>
-	color: #<?php echo $settings->dotColor; ?>;
-	font-size: <?php echo $settings->dotSize; ?>px;
 
-}
+<?php if ( 'true' === $settings->showCaptions ) : ?>
+	/* ---------------------------------------------------------------------
+	Photo Captions
+	------------------------------------------------------------------------ */
+	.fl-node-<?php echo esc_attr( $id ); ?> .slickPhotoCaption {
+		background-color: #000;
+		padding: 10px;
+		text-align: center;
+		color: #fff;
+	}
+<?php endif; ?>
 
-.fl-node-<?php echo $id; ?> .slick-dots button:hover {
-	<?php if ($settings->dotHoverBackgroundColor != '') {  ?>background: #<?php echo $settings->dotHoverBackgroundColor; ?>;<?php } else { ?> background: transparent; <?php } ?>
-	color: #<?php echo $settings->dotHoverColor; ?>;
-}
 
-.fl-node-<?php echo $id; ?> .slick-active button {
-	<?php if ($settings->dotActiveBackgroundColor != '') {  ?>background: #<?php echo $settings->dotActiveBackgroundColor; ?>;<?php } else { ?> background: transparent; <?php } ?>
-	color: #<?php echo $settings->dotActiveColor; ?>;
-}
+<?php if ( 'false' === $settings->adaptiveHeight ) : ?>
+	/* ---------------------------------------------------------------------
+	Fixed Height Size
+	------------------------------------------------------------------------ */
+	.fl-node-<?php echo esc_attr( $id ); ?> .slick-slide {
+		<?php if ( ! empty( $settings->fixedHeightSize ) ) : ?>
+		height: <?php echo esc_attr( $settings->fixedHeightSize ); ?>px;
+		<?php else : ?>
+		height: 500px;
+		<?php endif; ?>
+	}
 
-/* ---------------------------------------------------------------------
-Play/Pause
------------------------------------------------------------------------- */
-
-.slickModule_bb_Pause,
-.slickModule_bb_Pause:active,
-.slickModule_bb_Pause:focus {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	z-index: 10;
-}
-
-/* ---------------------------------------------------------------------
-Arrows
------------------------------------------------------------------------- */
-
-.slickModule_bb .slick-arrow,
-.slickModule_bb .slick-arrow:active,
-.slickModule_bb .slick-arrow:focus {
-	position: absolute;
-	top: 40%;
-	z-index: 10;
-}
-
-.slickModule_bb .slick-arrow.slick-prev {
-	left: 10px;
-}
-
-.slickModule_bb .slick-arrow.slick-next {
-	right: 10px;
-}
-
-<?php if ($settings->forceImageSize == 'true' && $settings->oneSlide == 'false') { ?>
-/* ---------------------------------------------------------------------
-Force Image Size
------------------------------------------------------------------------- */
-.fl-node-<?php echo $id; ?> .slick-slide img {
-	width: 100%;
-	height: auto;
-}
-<?php } ?>
-
-<?php if ($settings->showCaptions == 'true') { ?>
-/* ---------------------------------------------------------------------
-Photo Captions
------------------------------------------------------------------------- */
-.fl-node-<?php echo $id; ?> .slickPhotoCaption {
-	background-color: #000;
-	padding: 10px;
-	text-align: center;
-	color: #fff;
-}
-<?php } ?>
-
-<?php if ($settings->adaptiveHeight == 'false') { ?>
-/* ---------------------------------------------------------------------
-Fixed Height Size
------------------------------------------------------------------------- */
-.fl-node-<?php echo $id; ?> .slick-slide {
-	height: <?php echo $settings->fixedHeightSize; ?>px;
-}
-
-.fl-node-<?php echo $id; ?> .slick-slide img {
-	max-height: 100%;
-}
-<?php } ?>
-
-/* ---------------------------------------------------------------------
-Embeds
------------------------------------------------------------------------- */
-.videoWrapper {
-	position: relative;
-	padding-bottom: 56.25%;
-	height: 0;
-	overflow: hidden;
-	max-width: 100%;
-}
-.videoWrapper iframe {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-}
+	.fl-node-<?php echo esc_attr( $id ); ?> .slick-slide img {
+		max-height: 100%;
+	}
+<?php endif; ?>
