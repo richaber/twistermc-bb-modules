@@ -1215,4 +1215,109 @@ class BBSlickSlider extends FLBuilderModule {
 	public function the_slick_settings_object() {
 		echo wp_json_encode( $this->get_slick_settings() );
 	}
+
+	/**
+	 * Render a slide's markup.
+	 *
+	 * @param \stdClass $slide A stdClass object representing a slide, as defined in the tmcbb_slickslider_slide form.
+	 * @param int       $index Numeric key/index of the slide in the slides array.
+	 */
+	public function the_slide( $slide, $index = 0 ) {
+
+		$slide_type = $this->get_slide_type( $slide );
+
+		switch ( $slide_type ) {
+			case 'youtube':
+				$this->the_youtube_slide( $slide, $index );
+				break;
+			case 'vimeo':
+				$this->the_vimeo_slide( $slide, $index );
+				break;
+			case 'image':
+				$this->the_image_slide( $slide, $index );
+				break;
+		}
+	}
+
+	/**
+	 * Render an image slide.
+	 *
+	 * @param \stdClass $slide A stdClass object representing a slide, as defined in the tmcbb_slickslider_slide form.
+	 * @param int       $index Numeric key/index of the slide in the slides array.
+	 */
+	public function the_image_slide( $slide, $index = 0 ) {
+
+		?>
+
+		<li class="tmcbbm_slick_image"
+			data-type="<?php echo esc_attr( $this->get_slide_type( $slide ) ); ?>"
+			data-index="<?php echo esc_attr( $index ); ?>"
+			data-id="<?php echo esc_attr( $slide->slide_image ); ?>">
+			<?php
+			echo wp_get_attachment_image(
+				$slide->slide_image,
+				'large',
+				false,
+				array(
+					'class' => 'img-responsive',
+				)
+			);
+			?>
+			<?php if ( 'true' === $this->settings->showCaptions ) : ?>
+				<div class="slickPhotoCaption">
+					<?php echo wp_kses_post( get_post( $slide->slide_image )->post_excerpt ); ?>
+				</div>
+			<?php endif; ?>
+		</li>
+
+		<?php
+	}
+
+	/**
+	 * Render a YouTube slide.
+	 *
+	 * @param \stdClass $slide A stdClass object representing a slide, as defined in the tmcbb_slickslider_slide form.
+	 * @param int       $index Numeric key/index of the slide in the slides array.
+	 */
+	public function the_youtube_slide( $slide, $index = 0 ) {
+
+		?>
+
+		<li class="tmcbbm_slick_youtube"
+			data-type="<?php echo esc_attr( $this->get_slide_type( $slide ) ); ?>"
+			data-index="<?php echo esc_attr( $index ); ?>"
+			data-id="<?php echo esc_attr( $this->get_youtube_video_id( $slide->slide_embed ) ); ?>">
+			<div class="videoWrapper">
+				<?php
+				echo wp_oembed_get( $slide->slide_embed ); // WPCS: XSS OK.
+				?>
+			</div>
+		</li>
+
+		<?php
+	}
+
+	/**
+	 * Render a Vimeo slide.
+	 *
+	 * @param \stdClass $slide A stdClass object representing a slide, as defined in the tmcbb_slickslider_slide form.
+	 * @param int       $index Numeric key/index of the slide in the slides array.
+	 */
+	public function the_vimeo_slide( $slide, $index = 0 ) {
+
+		?>
+
+		<li class="tmcbbm_slick_vimeo"
+			data-type="<?php echo esc_attr( $this->get_slide_type( $slide ) ); ?>"
+			data-index="<?php echo esc_attr( $index ); ?>"
+			data-id="<?php echo esc_attr( $this->get_vimeo_video_id( $slide->slide_embed ) ); ?>">
+			<div class="videoWrapper">
+				<?php
+				echo wp_oembed_get( $slide->slide_embed ); // WPCS: XSS OK.
+				?>
+			</div>
+		</li>
+
+		<?php
+	}
 }
