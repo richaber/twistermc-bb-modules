@@ -542,4 +542,34 @@ class BBSlickSlider extends FLBuilderModule {
 		return $matches[1];
 	}
 
+	/**
+	 * Retrieve Video ID from supplied Vimeo URL.
+	 *
+	 * Tested with the following Vimeo Video URL formats:
+	 * https://vimeo.com/157287763
+	 * https://player.vimeo.com/video/157287763
+	 * https://player.vimeo.com/video/157287763?title=0&amp;byline=0&amp;portrait=0
+	 * https://vimeo.com/channels/staffpicks/157287763
+	 *
+	 * @param string $url A Vimeo Video URL in the supported format. Required.
+	 *
+	 * @return string|false The Vimeo Video ID upon success. False on error.
+	 */
+	public function get_vimeo_video_id( $url ) {
+
+		$vimeo_pattern = '%(?:https?://)?(?:www.)?(?:player.)?vimeo.com/(?:[a-z]*/)*([0-9]{6,11})[?]?.*%i';
+
+		/** Determine if this is actually a Vimeo URL and look for the Vimeo VIDEO_ID */
+		preg_match(
+			$vimeo_pattern,
+			$url,
+			$matches
+		);
+
+		if ( empty( $matches[1] ) ) {
+			return false;
+		}
+
+		return $matches[1];
+	}
 }
