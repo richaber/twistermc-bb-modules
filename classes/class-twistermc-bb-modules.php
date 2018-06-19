@@ -125,7 +125,7 @@ class TwisterMC_BB_Modules {
 		require_once TMCBBM_DIR . 'modules/slick/class-bbslickslider.php';
 		BBSlickSlider::register();
 
-		require_once TMCBBM_DIR . 'modules/fullImage/fullImage.php';
+		require_once TMCBBM_DIR . 'modules/fullimage/class-bbfullimage.php';
 		BBFullImage::register();
 	}
 }

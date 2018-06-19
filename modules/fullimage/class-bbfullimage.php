@@ -28,8 +28,8 @@ class BBFullImage extends FLBuilderModule {
 				'name'          => __( 'Full Image', 'tmcbbm' ),
 				'description'   => __( 'Full Width Image', 'tmcbbm' ),
 				'category'      => __( 'Advanced Modules', 'tmcbbm' ),
-				'dir'           => TMCBBM_DIR . 'modules/fullImage/',
-				'url'           => TMCBBM_URL . 'modules/fullImage/',
+				'dir'           => TMCBBM_DIR . 'modules/fullimage/',
+				'url'           => TMCBBM_URL . 'modules/fullimage/',
 			)
 		);
 
@@ -176,7 +176,7 @@ class BBFullImage extends FLBuilderModule {
 							),
 						),
 						'linkdetails'  => array(
-							'title'  => __( 'Link Details' ),
+							'title'  => __( 'Link Details', 'tmcbbm' ),
 							'fields' => array(
 								'linkurl'    => array(
 									'type'  => 'link',
