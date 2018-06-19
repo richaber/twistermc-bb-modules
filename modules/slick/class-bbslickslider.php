@@ -78,6 +78,8 @@ class BBSlickSlider extends FLBuilderModule {
 	 * What's implied, but not specifically stated, is that Beaver Builder itself handles instantiation on demand.
 	 * An unusual side effect of that approach, is that hooks in constructor appear to fire more than once.
 	 *
+	 * @uses \BBSlickSlider::register_settings_form(), \BBSlickSlider::register_module()
+	 *
 	 * @action init
 	 */
 	public static function register() {
@@ -506,6 +508,34 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Get the video ID from a YouTube or Vimeo video.
+	 *
+	 * @uses \BBSlickSlider::get_oembed_provider_name()
+	 * @uses \BBSlickSlider::get_youtube_video_id(), \BBSlickSlider::get_vimeo_video_id()
+	 *
+	 * @param string $url URL of the content to be embedded.
+	 *
+	 * @return string
+	 */
+	public function get_embed_video_id( $url ) {
+
+		$id = '';
+
+		$provider = $this->get_oembed_provider_name( $url );
+
+		switch ( $provider ) {
+			case 'youtube':
+				$id = $this->get_youtube_video_id( $url );
+				break;
+			case 'vimeo':
+				$id = $this->get_vimeo_video_id( $url );
+				break;
+		}
+
+		return $id;
+	}
+
+	/**
 	 * Retrieve Video ID from supplied YouTube URL.
 	 *
 	 * Tested with the following YouTube Video URL formats:
@@ -585,6 +615,8 @@ class BBSlickSlider extends FLBuilderModule {
 	/**
 	 * Get the oembed provider name from a given oembed URL.
 	 *
+	 * @uses \BBSlickSlider::get_oembed_url_patterns()
+	 *
 	 * @param string $url URL of the content to be embedded.
 	 *
 	 * @return string
@@ -603,6 +635,9 @@ class BBSlickSlider extends FLBuilderModule {
 
 	/**
 	 * Get the default query args for adding to our oEmbed call.
+	 *
+	 * @uses \BBSlickSlider::is_vimeo_oembed_url(), \BBSlickSlider::get_vimeo_default_query_args()
+	 * @uses \BBSlickSlider::is_youtube_oembed_url(), \BBSlickSlider::get_youtube_default_query_args()
 	 *
 	 * @param string $url URL of the content to be embedded. The original embed URL that was entered by user.
 	 *
@@ -653,6 +688,8 @@ class BBSlickSlider extends FLBuilderModule {
 	/**
 	 * Get the oembed regex pattern for matching against a URL.
 	 *
+	 * @uses \BBSlickSlider::get_oembed_url_patterns()
+	 *
 	 * @param string $provider The provider namme.
 	 *
 	 * @return string
@@ -669,6 +706,8 @@ class BBSlickSlider extends FLBuilderModule {
 
 	/**
 	 * Check if the given URL is from one of our supported oEmbed providers.
+	 *
+	 * @uses \BBSlickSlider::get_oembed_url_pattern_by_provider_name()
 	 *
 	 * @param string $url      URL to check against.
 	 * @param string $provider Embed provider to check against.
@@ -699,6 +738,8 @@ class BBSlickSlider extends FLBuilderModule {
 	/**
 	 * Check if the given URL is a YouTube oembed URL.
 	 *
+	 * @uses \BBSlickSlider::is_oembed_provider_url()
+	 *
 	 * @param string $url URL to check against.
 	 *
 	 * @return bool
@@ -709,6 +750,8 @@ class BBSlickSlider extends FLBuilderModule {
 
 	/**
 	 * Check if the given URL is a Vimeo oembed URL.
+	 *
+	 * @uses \BBSlickSlider::is_oembed_provider_url()
 	 *
 	 * @param string $url URL to check against.
 	 *
@@ -735,7 +778,9 @@ class BBSlickSlider extends FLBuilderModule {
 	/**
 	 * Get the slides from the module's settings.
 	 *
-	 * @return stdClass[]|array An array of stdClass "slide" objects on success, else empty array.
+	 * @uses \BBSlickSlider::has_slides()
+	 *
+	 * @return \stdClass[]|array An array of stdClass "slide" objects on success, else empty array.
 	 */
 	public function get_slides() {
 
@@ -749,7 +794,7 @@ class BBSlickSlider extends FLBuilderModule {
 	/**
 	 * Conditional check if the provided slide is an image slide.
 	 *
-	 * @param stdClass $slide A stdClass "slide" object to test.
+	 * @param \stdClass $slide A stdClass "slide" object to test.
 	 *
 	 * @return bool
 	 */
@@ -765,7 +810,7 @@ class BBSlickSlider extends FLBuilderModule {
 	/**
 	 * Conditional check if the provided slide is an ebmedded video slide.
 	 *
-	 * @param stdClass $slide A stdClass "slide" object to test.
+	 * @param \stdClass $slide A stdClass "slide" object to test.
 	 *
 	 * @return bool
 	 */
