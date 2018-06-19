@@ -934,4 +934,41 @@ class BBSlickSlider extends FLBuilderModule {
 			)
 		);
 	}
+
+	/**
+	 * Get the Slick Slider settings array.
+	 *
+	 * @uses \BBSlickSlider::get_slick_settings_defaults(), \BBSlickSlider::parse_args()
+	 * @uses \BBSlickSlider::get_slick_arrow()
+	 *
+	 * @return array
+	 */
+	public function get_slick_settings() {
+
+		$settings = $this->settings;
+
+		if ( empty( $settings ) ) {
+			$settings = $this->get_slick_settings_defaults();
+		}
+
+		$merged = $this->parse_args( json_decode( wp_json_encode( $settings ), true ), $this->get_slick_settings_defaults() );
+
+		if ( ! empty( $merged['vertical'] ) && 'true' === $merged['vertical'] ) {
+			$merged['prevArrow'] = $this->get_slick_arrow( 'prevArrow', 'true' );
+			$merged['nextArrow'] = $this->get_slick_arrow( 'nextArrow', 'true' );
+		}
+
+		foreach ( $merged as $key => $value ) {
+
+			if ( is_numeric( $value ) ) {
+				$merged[ $key ] = (int) $value;
+			}
+
+			if ( 'true' === $value || 'false' === $value ) {
+				$merged[ $key ] = wp_validate_boolean( $value );
+			}
+		}
+
+		return $merged;
+	}
 }
