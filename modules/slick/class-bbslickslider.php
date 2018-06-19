@@ -52,6 +52,8 @@ class BBSlickSlider extends FLBuilderModule {
 		);
 
 		$this->oembed = _wp_oembed_get_object();
+
+		$this->add_hooks();
 	}
 
 	/**
@@ -561,6 +563,168 @@ class BBSlickSlider extends FLBuilderModule {
 				),
 			)
 		);
+	}
+
+	/**
+	 * Add hooks for this module.
+	 */
+	public function add_hooks() {
+
+		/**
+		 * The oembed_fetch_url filter allows us to modify the URL before it is sent to the oembed provider.
+		 */
+		add_filter( 'oembed_fetch_url', array( $this, 'oembed_fetch_url' ), 10, 3 );
+
+		/**
+		 * The oembed_dataparse filter allows us to inspect the data object that was returned by the oembed provider.
+		 */
+		add_filter( 'oembed_dataparse', array( $this, 'oembed_dataparse' ), 10, 3 );
+	}
+
+	/**
+	 * Filters the returned oEmbed HTML.
+	 *
+	 * @param string $return The returned oEmbed HTML.
+	 * @param object $data   A data object result from an oEmbed provider.
+	 * @param string $url    The URL of the content to be embedded.
+	 *
+	 * @return string
+	 */
+	public function oembed_dataparse( $return, $data, $url ) {
+
+		if ( empty( $this->node ) || empty( $this->settings ) ) {
+			return $return;
+		}
+
+		if ( ! $this->is_youtube_oembed_url( $url ) && ! $this->is_vimeo_oembed_url( $url ) ) {
+			return $return;
+		}
+
+		$post = get_post();
+
+		if ( ! empty( $post ) ) {
+
+			$meta_key  = 'tmcbb_dataparse_' . md5( $url );
+
+			$meta_value = wp_json_encode( $data );
+
+			update_post_meta( $post->ID, $meta_key, $meta_value );
+		}
+
+		/**
+		 * Running into some situations where &amp; is present and it causes lots of "fun".
+		 */
+		$return = str_replace( '&amp;', '&', $return );
+		$url = str_replace( '&amp;', '&', $url );
+
+		$extracted_urls = wp_extract_urls( $return );
+
+		$video_id = $this->get_embed_video_id( $url );
+
+		if ( empty( $extracted_urls[0] ) ) {
+			return $return;
+		}
+
+		$query_args = $this->get_embed_video_default_query_args( $url );
+
+		$new_embed_src = add_query_arg( $query_args, $extracted_urls[0] );
+
+		$new_embed_src = str_replace( '&amp;', '&', $new_embed_src );
+
+		$return = str_replace( $extracted_urls[0], $new_embed_src, $return );
+
+		$dom_helper = new TwisterMC_BB_DOMDocument_Utility( $return );
+
+		$iframe_node_list = $dom_helper->dom_document->getElementsByTagName( 'iframe' );
+
+		/**
+		 * An oEmbed should only really return a single iframe.
+		 */
+		$iframe_element = $iframe_node_list->item( 0 );
+
+		/**
+		 * Set title attribute on the iframe if possible.
+		 */
+		if ( ! $iframe_element->hasAttribute( 'title' ) && ! empty( $data->title ) ) {
+			$iframe_element->setAttribute( 'title', $data->title );
+		}
+
+		/**
+		 * @var string $video_id
+		 */
+		$video_id = $this->get_embed_video_id( $url );
+
+		/**
+		 * Set the ID attribute to the video ID.
+		 */
+		$iframe_element->setAttribute( 'id', $video_id );
+
+		/**
+		 * Set 'allow' attribute on the iframe.
+		 *
+		 * Chrome has some internal policies that restrict autoplay.
+		 * Adding 'allow="autoplay"' should help alleviate some of Chrome's policies from preventing autoplay.
+		 *
+		 * @link https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
+		 * @link https://github.com/WICG/feature-policy/blob/gh-pages/features.md
+		 * @link https://wicg.github.io/feature-policy/#iframe-allow-attribute
+		 */
+		$iframe_element->setAttribute( 'allow', 'autoplay; encrypted-media; fullscreen;' );
+
+		/**
+		 * Apparently you can also set an enablejsapi attribute on the YouTube iframe as well as in the src URL.
+		 */
+		if ( $this->is_oembed_provider_url( $url, 'youtube' ) ) {
+			$iframe_element->setAttribute( 'enablejsapi', 'true' );
+		}
+
+		$return = $dom_helper->save_dom_document();
+		$return = str_replace( '&amp;', '&', $return );
+
+		return $return;
+	}
+
+	/**
+	 * Add params to oEmbed provider request URL.
+	 *
+	 * WordPress runs the embed URL through urlencode prior to constructing it's oEmbed provider endpoint call.
+	 * This renders any passed in URL query params useless for Vimeo/YouTube embeds (and probably others).
+	 *
+	 * The first function param, $provider, is the oEmbed provider endpoint.
+	 * The optional second param, $url, is the original URL entered by the user.
+	 * The optional third param, $args, typically represents parameters passed by shortcode.
+	 *
+	 * @filter oembed_fetch_url
+	 *
+	 * @see WP_oEmbed::fetch()
+	 * @see add_query_arg
+	 *
+	 * @link https://developer.wordpress.org/reference/hooks/oembed_fetch_url/
+	 * @link https://developer.wordpress.org/reference/functions/add_query_arg/
+	 *
+	 * @param string $provider URL of the oEmbed provider. Includes query arguments setup by Core.
+	 * @param string $url      URL of the content to be embedded. The original embed URL that was entered by user.
+	 * @param array  $args     Optional arguments, usually passed from a shortcode.
+	 *
+	 * @return string
+	 */
+	public function oembed_fetch_url( $provider, $url, $args ) {
+
+		if ( empty( $this->node ) || empty( $this->settings ) ) {
+			return $provider;
+		}
+
+		if ( ! $this->is_youtube_oembed_url( $url ) && ! $this->is_vimeo_oembed_url( $url ) ) {
+			return $provider;
+		}
+
+		$query_args = $this->get_embed_video_default_query_args( $url );
+
+		$provider = str_replace( '&amp;', '&', $provider );
+
+		$provider = add_query_arg( $query_args, $provider );
+
+		return str_replace( '&amp;', '&', $provider );
 	}
 
 	/**
