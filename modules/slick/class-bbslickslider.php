@@ -46,8 +46,8 @@ class BBSlickSlider extends FLBuilderModule {
 				'name'          => __( 'Slick', 'tmcbb' ),
 				'description'   => __( 'Slick Slider for BeaverBuilder', 'tmcbb' ),
 				'category'      => __( 'Advanced Modules', 'tmcbb' ),
-				'dir'           => TMCBBM_DIR . 'slick/',
-				'url'           => TMCBBM_URL . 'slick/',
+				'dir'           => TMCBBM_DIR . 'modules/slick/',
+				'url'           => TMCBBM_URL . 'modules/slick/',
 			)
 		);
 
@@ -956,7 +956,7 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
-	 * Get the Slick Slider settings array.
+	 * Get the Slick Slider settings array for use with JS.
 	 *
 	 * @uses \BBSlickSlider::get_slick_settings_defaults(), \BBSlickSlider::parse_args()
 	 * @uses \BBSlickSlider::get_slick_arrow()
@@ -1264,7 +1264,7 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
-	 * Print the Slick Slider settings object.
+	 * Print the Slick Slider settings object for use with JS.
 	 *
 	 * @uses \BBSlickSlider::get_slick_settings()
 	 */
