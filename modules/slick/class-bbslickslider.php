@@ -1166,6 +1166,20 @@ class BBSlickSlider extends FLBuilderModule {
 	}
 
 	/**
+	 * Conditional check if slider videos are set to autoplay.
+	 *
+	 * @return bool
+	 */
+	public function is_slider_video_autoplay() {
+
+		if ( empty( $this->node ) || empty( $this->settings ) ) {
+			return false;
+		}
+
+		return wp_validate_boolean( $this->settings->autoplay_videos );
+	}
+
+	/**
 	 * Print the Slick Slider settings object.
 	 *
 	 * @uses \BBSlickSlider::get_slick_settings()
